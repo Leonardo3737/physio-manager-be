@@ -2,35 +2,35 @@ import { CreatePatientType } from "../dtos/patient/create-patient.dto";
 import { ListPatientDTO } from "../dtos/patient/list-patient.dto";
 import { PatientType } from "../dtos/patient/patient.schema";
 import { UpdatePatientType } from "../dtos/patient/update-patient.dto";
+import Patient from "../models/patient.model";
 
 export class PatientRepository {
 
-  alterPatient(id: number, newPatientData: UpdatePatientType): void {
+  async alterPatient(id: number, newPatientData: UpdatePatientType): Promise<void> {
+    await Patient.update({...newPatientData}, {where: {id}})
+  }
+
+  async createPatient(newPatient: CreatePatientType): Promise<PatientType> {
+
+    const process = await Patient.create(newPatient)
+    console.log(process.age);
     
+    const patientCreated = new ListPatientDTO({...process.dataValues}).getAll()
+
+    return patientCreated
   }
 
-  createPatient(newPatient: CreatePatientType): PatientType {
-
-    const data = {
-      id: 1,
-      ...newPatient
-    }    
-
-    return new ListPatientDTO(data).getAll()
-  }
-
-  deletePatient(id: number): void {
-    const patients: PatientType[] = []
-    const patient: PatientType | undefined = patients.find(p => p.id === id)
+  async deletePatient(id: number): Promise<void> {
+    await Patient.destroy({where: { id }})
   }
   
-  listAllPatients(filter?: UpdatePatientType): PatientType[] {
-    const patients: PatientType[] = []
+  async listAllPatients(filter?: UpdatePatientType): Promise<PatientType[]> {
+    const patients = await Patient.findAll({where: {...filter}})
     return patients
   }
 
-  listPatientById(id: number): PatientType {
-    let patient: PatientType = {} as PatientType
+  async listPatientById(id: number): Promise<PatientType | null> {
+    const patient = await Patient.findByPk(id)
     return patient
   }
 }

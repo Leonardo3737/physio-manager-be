@@ -1,3 +1,4 @@
+import { AppError } from "../config/errors/app.error"
 import { CreatePatientDTO, CreatePatientType } from "../dtos/patient/create-patient.dto"
 import { PatientType } from "../dtos/patient/patient.schema"
 import { UpdatePatientDTO } from "../dtos/patient/update-patient.dto"
@@ -9,23 +10,31 @@ export class PatientService {
     private repository: PatientRepository
   ) { }
 
-  alterPatient(id: number, newPatientData: UpdatePatientDTO): void {
-    this.repository.alterPatient(id, newPatientData.getAll())
+  async alterPatient(id: number, newPatientData: UpdatePatientDTO): Promise<void> {
+    await this.listPatientById(id)
+    await this.repository.alterPatient(id, newPatientData.getAll())
   }
 
-  registerPatient(newPatient: CreatePatientDTO): PatientType {    
-    return this.repository.createPatient(newPatient.getAll())
+  async registerPatient(newPatient: CreatePatientDTO): Promise<PatientType> {    
+    return await this.repository.createPatient(newPatient.getAll())
   }
 
-  deletePatient(id: number): void {
-    this.repository.deletePatient(id)
+  async deletePatient(id: number): Promise<void> {
+    await this.listPatientById(id)
+    await this.repository.deletePatient(id)
   }
 
-  listAllPatients(filter?: UpdatePatientDTO): PatientType[] {
-    return this.repository.listAllPatients(filter?.getAll())
+  async listAllPatients(filter?: UpdatePatientDTO): Promise<PatientType[]> {
+    return await this.repository.listAllPatients(filter?.getAll())
   }
   
-  listPatientById(id: number): PatientType | undefined {
-    return this.repository.listPatientById(id)
+  async listPatientById(id: number): Promise<PatientType> {
+    const patient = await this.repository.listPatientById(id)
+
+    if(!patient) {
+      throw new AppError('Patient not found', 404)
+    }
+
+    return patient
   }
 }

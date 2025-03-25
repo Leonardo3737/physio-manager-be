@@ -6,49 +6,51 @@ import { UpdatePatientDTO } from "../dtos/patient/update-patient.dto";
 export class PatientController {
 
   static path = '/patient'
+  static pathWithId = `${PatientController.path}/:id`
 
   constructor(
     private app: Application,
     private service: PatientService
   ) {
 
-    app.delete(PatientController.path, (req: Request, res: Response) => {
+    app.delete(PatientController.pathWithId, async (req: Request, res: Response) => {
       const id = Number(req.params.id)
-      const patientDeleted = this.service.deletePatient(id)
-      res.status(200).send(patientDeleted)
+      await this.service.deletePatient(id)
+      res.status(204).send()
     })
 
-    app.get(PatientController.path, (req: Request, res: Response) => {
+    app.get(PatientController.path, async (req: Request, res: Response) => {
       const data = new UpdatePatientDTO({
         ...req.body
       })
 
-      const patients = this.service.listAllPatients(data)
+      const patients = await this.service.listAllPatients(data)
       res.send(patients)
     })
 
-    app.get('/patient/:id', (req: Request, res: Response) => {
+    app.get(PatientController.pathWithId, async (req: Request, res: Response) => {
       const id = Number(req.params.id)
-      const patient = this.service.listPatientById(id)
+      const patient = await this.service.listPatientById(id)
       res.send(patient)
     })
 
-    app.post(PatientController.path, (req: Request, res: Response) => {
+    app.post(PatientController.path, async (req: Request, res: Response) => {
       const data = new CreatePatientDTO({
         ...req.body
       })
 
-      const newPatient = this.service.registerPatient(data)
-      res.send(newPatient).status(201)
+      const newPatient = await this.service.registerPatient(data)
+      res.status(201).send(newPatient)
     })
 
-    app.put(PatientController.path, (req: Request, res: Response) => {
+    app.put(PatientController.pathWithId, async (req: Request, res: Response) => {
       const id = Number(req.params.id)
       const data = new UpdatePatientDTO({
         ...req.body
       })
 
-      this.service.alterPatient(id, data)
+      await this.service.alterPatient(id, data)
+      res.status(204).send()
     })
   }
 
