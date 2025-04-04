@@ -13,7 +13,6 @@ export class PatientRepository {
   async createPatient(newPatient: CreatePatientType): Promise<PatientType> {
 
     const process = await Patient.create(newPatient)
-    console.log(process.age);
     
     const patientCreated = new ListPatientDTO({...process.dataValues}).getAll()
 

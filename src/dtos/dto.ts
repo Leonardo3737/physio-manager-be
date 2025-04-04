@@ -33,7 +33,7 @@ export abstract class DTO<Schema extends z.ZodType> {
     return this.data
   }
 
-  public get<Key extends keyof z.infer<Schema>>(key: Key): z.infer<Schema> {
+  public get<Key extends keyof z.infer<Schema>>(key: Key) {
     return this.data[key]
   }
 }
