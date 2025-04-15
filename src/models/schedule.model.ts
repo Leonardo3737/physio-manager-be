@@ -2,13 +2,13 @@ import { DataTypes, Model } from 'sequelize';
 import { ScheduleType } from '../dtos/schedule/schedule.schema';
 import { CreateScheduleType } from '../dtos/schedule/create-schedule.dto';
 import sequelize from '../config/db-connection';
-import { ScheduleStatus } from '../enum/schedule-status.enum'; // Importando o Enum
+import { ScheduleStatus } from '../enum/schedule-status.enum';
 
 class Schedule extends Model<ScheduleType, CreateScheduleType> {
     declare id: number;
     declare patientId: number;
     declare date: Date;
-    declare status: ScheduleStatus; // Alterado para o tipo ScheduleStatus
+    declare status: ScheduleStatus; 
     declare notes: string | null;
     declare createdAt: Date;
     declare updatedAt: Date;
@@ -29,7 +29,7 @@ Schedule.init({
         allowNull: false
     },
     status: {
-        type: DataTypes.ENUM(...Object.values(ScheduleStatus)), // Usando o ENUM do ScheduleStatus
+        type: DataTypes.ENUM(...Object.values(ScheduleStatus)), 
         allowNull: false
     },
     notes: {
