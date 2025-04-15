@@ -7,7 +7,7 @@ export const UpdateScheduleSchema = ScheduleSchema.omit({
   createdAt: true,
   updatedAt: true,
   id: true
-}) // não precisa de refine porque status já é um enum e os campos já são obrigatórios
+}) // campos já são obrigatórios
 
 export type UpdateScheduleType = z.infer<typeof UpdateScheduleSchema>
 
