@@ -2,12 +2,13 @@
 import { z } from 'zod'
 import { ScheduleSchema } from './schedule.schema'
 import { DTO } from '../dto'
+import { CreateScheduleSchema } from './create-schedule.dto'
 
 export const UpdateScheduleSchema = ScheduleSchema.omit({
+  id: true,
   createdAt: true,
   updatedAt: true,
-  id: true
-}) // campos já são obrigatórios
+}).partial()
 
 export type UpdateScheduleType = z.infer<typeof UpdateScheduleSchema>
 

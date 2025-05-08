@@ -3,7 +3,6 @@ import { PatientType } from "../dtos/patient/patient.schema";
 import { CreatePatientType } from "../dtos/patient/create-patient.dto";
 import sequelize from "../config/db-connection";
 
-
 class Patient extends Model<PatientType, CreatePatientType> {
   declare id: number;
   declare name: string;

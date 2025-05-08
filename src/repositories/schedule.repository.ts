@@ -1,11 +1,12 @@
 import { CreateScheduleType } from '../dtos/schedule/create-schedule.dto'
 import { ListScheduleDTO } from '../dtos/schedule/list-schedule.dto'
 import { ScheduleType } from '../dtos/schedule/schedule.schema'
+import { UpdateScheduleDTO, UpdateScheduleType } from '../dtos/schedule/update-schedule.dto'
 import Schedule from '../models/schedule.model'
 import ScheduleModel from '../models/schedule.model'
 export class ScheduleRepository {
 
-  async alterSchedule(id: number, newScheduleData: CreateScheduleType): Promise<void> {
+  async alterSchedule(id: number, newScheduleData: UpdateScheduleType): Promise<void> {
     await ScheduleModel.update({ ...newScheduleData }, { where: { id } })
   }
 
@@ -19,7 +20,7 @@ export class ScheduleRepository {
     await ScheduleModel.destroy({ where: { id } })
   }
 
-  async listAllSchedules(filter?: Partial<CreateScheduleType>): Promise<ScheduleType[]> {
+  async listAllSchedules(filter?: UpdateScheduleType): Promise<ScheduleType[]> {
     const validFilter = Object.fromEntries(
       Object.entries(filter || {}).filter(([_, v]) => v !== undefined)
     )
