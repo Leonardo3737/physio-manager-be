@@ -2,6 +2,9 @@ import { Application } from "express";
 import { PatientController } from "../controllers/patient.controller";
 import { PatientRepository } from "../repositories/patient.repository";
 import { PatientService } from "../services/patient.service";
+import { ScheduleRepository } from "../repositories/schedule.repository";
+import { ScheduleService } from "../services/schedule.service";
+import { ScheduleController } from "../controllers/schedule.controller";
 
 export function controllersStartup(app: Application) {
 
@@ -10,4 +13,8 @@ export function controllersStartup(app: Application) {
   const patientService = new PatientService(patientRespository)
   new PatientController(app, patientService)
   
+  /* SCHEDULE */
+  const scheduleRespository = new ScheduleRepository()
+  const scheduleService = new ScheduleService(scheduleRespository)
+  new ScheduleController(app, scheduleService)
 }

@@ -5,6 +5,8 @@ import { DTO } from '../dto'
 export const CreateScheduleSchema = ScheduleSchema.omit({
   id: true,
   createdAt: true,
+  initialDiscomfort: true,
+  finalDiscomfort: true,
   updatedAt: true,
 })
 
