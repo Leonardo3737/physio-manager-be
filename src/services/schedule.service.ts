@@ -29,7 +29,7 @@ export class ScheduleService {
     await this.repository.deleteSchedule(id)
   }
 
-  async listAllSchedules(filter?: ListScheduleDTO): Promise<ScheduleType[]> {
+  async listAllSchedules(filter?: UpdateScheduleDTO): Promise<ScheduleType[]> {
     return await this.repository.listAllSchedules(filter?.getAll())
   }
 

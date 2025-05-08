@@ -22,7 +22,7 @@ export class ScheduleController {
     })
 
     app.get(ScheduleController.path, async (req: Request, res: Response) => {
-      const data = new ListScheduleDTO({
+      const data = new UpdateScheduleDTO({
         ...req.body
       })
 
@@ -36,7 +36,16 @@ export class ScheduleController {
       res.send(schedule)
     })
 
-      
+    app.patch(ScheduleController.pathWithId, async (req: Request, res: Response) => {
+      const id = Number(req.params.id)
+      const data = new UpdateScheduleDTO({
+        ...req.body
+      })
+
+      await this.service.alterSchedule(id, data)
+      res.status(204).send()
+    })
+
     app.post(ScheduleController.path, async (req: Request, res: Response) => {
       const data = new CreateScheduleDTO({
         ...req.body
@@ -46,14 +55,6 @@ export class ScheduleController {
       res.status(201).send(newSchedule)
     })
 
-    app.put(ScheduleController.pathWithId, async (req: Request, res: Response) => {
-      const id = Number(req.params.id)
-      const data = new UpdateScheduleDTO({
-        ...req.body
-      })
 
-      await this.service.alterSchedule(id, data)
-      res.status(204).send()
-    })
   }
 }

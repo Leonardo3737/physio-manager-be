@@ -2,8 +2,6 @@ import { DataTypes, Model } from "sequelize";
 import { PatientType } from "../dtos/patient/patient.schema";
 import { CreatePatientType } from "../dtos/patient/create-patient.dto";
 import sequelize from "../config/db-connection";
-import Schedule from "./schedule.model";
-
 
 class Patient extends Model<PatientType, CreatePatientType> {
   declare id: number;
@@ -43,10 +41,5 @@ Patient.init({
   sequelize,
   tableName: 'patient'
 })
-
-Patient.hasMany(Schedule, {
-  foreignKey: 'patientId',
-  as: 'schedules'
-});
 
 export default Patient

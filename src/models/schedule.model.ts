@@ -12,19 +12,19 @@ class Schedule extends Model<ScheduleType, CreateScheduleType> {
     declare initialDiscomfort: number;
     declare finalDiscomfort: number;
     declare notes: string | null;
-    declare status: ScheduleStatus; 
+    declare status: ScheduleStatus;
     declare createdAt: Date;
     declare updatedAt: Date;
 }
 
 Schedule.init({
     id: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
     patientId: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         allowNull: false
     },
     date: {
@@ -32,11 +32,11 @@ Schedule.init({
         allowNull: false
     },
     finalDiscomfort: {
-        type: DataTypes.SMALLINT.UNSIGNED,
+        type: DataTypes.SMALLINT,
         allowNull: true
     },
     initialDiscomfort: {
-        type: DataTypes.SMALLINT.UNSIGNED,
+        type: DataTypes.SMALLINT,
         allowNull: true
     },
     notes: {
@@ -44,7 +44,7 @@ Schedule.init({
         allowNull: true
     },
     status: {
-        type: DataTypes.ENUM(...Object.values(ScheduleStatus)), 
+        type: DataTypes.ENUM(...Object.values(ScheduleStatus)),
         allowNull: false
     },
     createdAt: DataTypes.DATE,
@@ -59,6 +59,11 @@ Schedule.init({
 Schedule.belongsTo(Patient, {
     foreignKey: 'patientId',
     as: 'patient'
-})
+});
+
+Patient.hasMany(Schedule, {
+    foreignKey: 'patientId',
+    as: 'schedules'
+});
 
 export default Schedule;
