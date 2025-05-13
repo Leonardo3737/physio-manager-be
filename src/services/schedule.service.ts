@@ -5,6 +5,7 @@ import { ListScheduleDTO } from '../dtos/schedule/list-schedule.dto'
 import { ScheduleRepository } from '../repositories/schedule.repository'
 import { ScheduleType } from "../dtos/schedule/schedule.schema"
 import { ScheduleStatus } from "../enum/schedule-status.enum"
+import { ScheduleFilterDTO } from "../dtos/schedule/schedule-filter.dto"
 
 export class ScheduleService {
 
@@ -33,7 +34,7 @@ export class ScheduleService {
     await this.repository.deleteSchedule(id)
   }
 
-  async listAllSchedules(filter?: UpdateScheduleDTO): Promise<ScheduleType[]> {
+  async listAllSchedules(filter?: ScheduleFilterDTO): Promise<ScheduleType[]> {
     return await this.repository.listAllSchedules(filter?.getAll())
   }
 

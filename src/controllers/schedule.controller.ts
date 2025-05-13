@@ -4,6 +4,7 @@ import { ScheduleService } from "../services/schedule.service";
 import { CreateScheduleDTO } from "../dtos/schedule/create-schedule.dto";
 import { UpdateScheduleDTO } from "../dtos/schedule/update-schedule.dto";
 import { ListScheduleDTO } from "../dtos/schedule/list-schedule.dto";
+import { ScheduleFilterDTO } from "../dtos/schedule/schedule-filter.dto";
 
 export class ScheduleController {
 
@@ -22,7 +23,7 @@ export class ScheduleController {
     })
 
     app.get(ScheduleController.path, async (req: Request, res: Response) => {
-      const data = new UpdateScheduleDTO({
+      const data = new ScheduleFilterDTO({
         ...req.query
       })
 

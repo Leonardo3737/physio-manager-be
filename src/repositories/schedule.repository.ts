@@ -1,7 +1,9 @@
 import { CreateScheduleType } from '../dtos/schedule/create-schedule.dto'
 import { ListScheduleDTO } from '../dtos/schedule/list-schedule.dto'
+import { ScheduleFilterType } from '../dtos/schedule/schedule-filter.dto'
 import { ScheduleType } from '../dtos/schedule/schedule.schema'
-import { UpdateScheduleDTO, UpdateScheduleType } from '../dtos/schedule/update-schedule.dto'
+import { UpdateScheduleType } from '../dtos/schedule/update-schedule.dto'
+import { Op, WhereOptions } from 'sequelize'
 import Patient from '../models/patient.model'
 import Schedule from '../models/schedule.model'
 import ScheduleModel from '../models/schedule.model'
@@ -21,19 +23,37 @@ export class ScheduleRepository {
     await ScheduleModel.destroy({ where: { id } })
   }
 
-  async listAllSchedules(filter?: UpdateScheduleType): Promise<ScheduleType[]> {
+  async listAllSchedules(filter?: ScheduleFilterType): Promise<ScheduleType[]> {
     const validFilter = Object.fromEntries(
       Object.entries(filter || {}).filter(([_, v]) => v !== undefined)
     )
 
+    const where: WhereOptions<Schedule> = {}
+
+    Object.keys(validFilter).map(key => {
+      if(key in Schedule) {
+        where[key as keyof WhereOptions<Schedule>] = validFilter[key]
+      }
+    })   
+
+    if (
+      validFilter.initialDate instanceof Date &&
+      validFilter.finalDate instanceof Date
+    ) {
+      where.date = {
+        [Op.between]: [validFilter.initialDate, validFilter.finalDate],
+      }
+    }
+
     const schedules = await ScheduleModel.findAll({
-      where: validFilter,
+      where,
       include: [
         {
           model: Patient,
           as: 'patient'
         }
-      ]
+      ],
+      order: [['date', 'ASC']],
     },
     )
     return schedules

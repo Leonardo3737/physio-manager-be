@@ -8,7 +8,7 @@ import cors from 'cors';
 import { controllersStartup } from './config/controllers-startup';
 import { DBconnectionTest } from './config/db-connection';
 
-const port = process.env.PORT
+const port = Number(process.env.PORT)
 
 const app = express()
 
