@@ -23,7 +23,7 @@ export class ScheduleController {
 
     app.get(ScheduleController.path, async (req: Request, res: Response) => {
       const data = new UpdateScheduleDTO({
-        ...req.body
+        ...req.query
       })
 
       const schedules = await this.service.listAllSchedules(data)

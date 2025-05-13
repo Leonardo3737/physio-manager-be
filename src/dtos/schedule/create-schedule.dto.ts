@@ -8,7 +8,10 @@ export const CreateScheduleSchema = ScheduleSchema.omit({
   initialDiscomfort: true,
   finalDiscomfort: true,
   updatedAt: true,
-})
+}).extend({
+  status: ScheduleSchema.shape.status.optional(), // apenas "notes" opcional
+});
+
 
 export type CreateScheduleType = z.infer<typeof CreateScheduleSchema>
 

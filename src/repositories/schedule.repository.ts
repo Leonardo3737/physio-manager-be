@@ -2,6 +2,7 @@ import { CreateScheduleType } from '../dtos/schedule/create-schedule.dto'
 import { ListScheduleDTO } from '../dtos/schedule/list-schedule.dto'
 import { ScheduleType } from '../dtos/schedule/schedule.schema'
 import { UpdateScheduleDTO, UpdateScheduleType } from '../dtos/schedule/update-schedule.dto'
+import Patient from '../models/patient.model'
 import Schedule from '../models/schedule.model'
 import ScheduleModel from '../models/schedule.model'
 export class ScheduleRepository {
@@ -24,7 +25,17 @@ export class ScheduleRepository {
     const validFilter = Object.fromEntries(
       Object.entries(filter || {}).filter(([_, v]) => v !== undefined)
     )
-    const schedules = await ScheduleModel.findAll({ where: validFilter })
+
+    const schedules = await ScheduleModel.findAll({
+      where: validFilter,
+      include: [
+        {
+          model: Patient,
+          as: 'patient'
+        }
+      ]
+    },
+    )
     return schedules
   }
 
@@ -32,14 +43,14 @@ export class ScheduleRepository {
     const schedule = await ScheduleModel.findByPk(id)
     return schedule
   }
-  
+
   async checkConflictingAppointment(patientId: number, appointmentDate: Date): Promise<boolean> {
     const conflictingAppointment = await Schedule.findOne({
       where: {
         patientId: patientId,
-        date: appointmentDate, 
+        date: appointmentDate,
       }
     });
-    return !!conflictingAppointment; 
+    return !!conflictingAppointment;
   }
 }

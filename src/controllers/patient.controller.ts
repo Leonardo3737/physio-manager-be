@@ -22,7 +22,7 @@ export class PatientController {
 
     app.get(PatientController.path, async (req: Request, res: Response) => {
       const data = new UpdatePatientDTO({
-        ...req.body
+        ...req.query
       })
 
       const patients = await this.service.listAllPatients(data)

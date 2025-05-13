@@ -4,6 +4,7 @@ import { UpdateScheduleDTO } from '../dtos/schedule/update-schedule.dto'
 import { ListScheduleDTO } from '../dtos/schedule/list-schedule.dto'
 import { ScheduleRepository } from '../repositories/schedule.repository'
 import { ScheduleType } from "../dtos/schedule/schedule.schema"
+import { ScheduleStatus } from "../enum/schedule-status.enum"
 
 export class ScheduleService {
 
@@ -12,7 +13,10 @@ export class ScheduleService {
   ) { }
 
   async registerSchedule(newSchedule: CreateScheduleDTO): Promise<ScheduleType> {
-    return await this.repository.createSchedule(newSchedule.getAll())
+    const schedule = {...newSchedule.getAll()}
+    schedule.status = ScheduleStatus.SCHEDULED
+    
+    return await this.repository.createSchedule(schedule)
   }
 
   async alterSchedule(id: number, newScheduleData: UpdateScheduleDTO): Promise<void> {
