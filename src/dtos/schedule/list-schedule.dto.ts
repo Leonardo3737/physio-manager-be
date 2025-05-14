@@ -1,14 +1,17 @@
 import { z } from 'zod'
 import { ScheduleSchema } from './schedule.schema'
+import { DTO } from '../dto';
 
-export class ListScheduleDTO {
-  private data: z.infer<typeof ScheduleSchema>
 
-  constructor(payload: unknown) {
-    this.data = ScheduleSchema.parse(payload)
-  }
+export const ListScheduleSchema = ScheduleSchema.extend({
+  initialDiscomfort: ScheduleSchema.shape.initialDiscomfort.nullable(),
+  finalDiscomfort: ScheduleSchema.shape.finalDiscomfort.nullable(),
+});
 
-  getAll() {
-    return this.data
-  }
+export type ListScheduleType = z.infer<typeof ListScheduleSchema>
+
+export class ListScheduleDTO extends DTO<typeof ListScheduleSchema> {
+  protected rules() {
+      return ListScheduleSchema
+    }
 }

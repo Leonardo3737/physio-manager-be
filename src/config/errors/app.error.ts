@@ -1,6 +1,7 @@
 export class AppError {
   constructor(
     public readonly message: string,
-    public readonly statusCode = 400
+    public readonly statusCode = 400,
+    public readonly code: string = "Error",
   ) { }
 }

@@ -8,8 +8,8 @@ export const ScheduleSchema = z.object({
   patient: PatientSchema.optional(),
   date: z.coerce.date(),
   notes: z.string().nullable().optional(),
-  initialDiscomfort: z.number().int().min(0).max(10).nullable(),
-  finalDiscomfort: z.number().int().min(0).max(10).nullable(),
+  initialDiscomfort: z.number().int().min(0).max(10),
+  finalDiscomfort: z.number().int().min(0).max(10),
   status: z.nativeEnum(ScheduleStatus),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional()

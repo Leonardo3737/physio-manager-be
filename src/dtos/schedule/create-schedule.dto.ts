@@ -9,7 +9,9 @@ export const CreateScheduleSchema = ScheduleSchema.omit({
   finalDiscomfort: true,
   updatedAt: true,
 }).extend({
-  status: ScheduleSchema.shape.status.optional(), // apenas "notes" opcional
+  status: ScheduleSchema.shape.status.optional(),
+  initialDiscomfort: ScheduleSchema.shape.initialDiscomfort.optional().nullable(),
+  finalDiscomfort: ScheduleSchema.shape.finalDiscomfort.optional().nullable(),
 });
 
 

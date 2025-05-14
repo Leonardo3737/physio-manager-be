@@ -12,6 +12,7 @@ export default function responseError(
   if (error instanceof AppError) {
     response.status(error.statusCode).json({
       status: 'error',
+      code: error.code,
       message: error.message,
     });
     return

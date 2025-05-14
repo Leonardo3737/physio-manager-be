@@ -1,5 +1,5 @@
 import { CreateScheduleType } from '../dtos/schedule/create-schedule.dto'
-import { ListScheduleDTO } from '../dtos/schedule/list-schedule.dto'
+import { ListScheduleDTO, ListScheduleType } from '../dtos/schedule/list-schedule.dto'
 import { ScheduleFilterType } from '../dtos/schedule/schedule-filter.dto'
 import { ScheduleSchema, ScheduleType } from '../dtos/schedule/schedule.schema'
 import { UpdateScheduleType } from '../dtos/schedule/update-schedule.dto'
@@ -13,7 +13,7 @@ export class ScheduleRepository {
     await ScheduleModel.update({ ...newScheduleData }, { where: { id } })
   }
 
-  async createSchedule(newSchedule: CreateScheduleType): Promise<ScheduleType> {
+  async createSchedule(newSchedule: CreateScheduleType): Promise<ListScheduleType> {
     const process = await ScheduleModel.create(newSchedule)
     const created = new ListScheduleDTO({ ...process.dataValues }).getAll()
     return created
