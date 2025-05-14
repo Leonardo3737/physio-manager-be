@@ -1,7 +1,7 @@
 import { CreateScheduleType } from '../dtos/schedule/create-schedule.dto'
 import { ListScheduleDTO } from '../dtos/schedule/list-schedule.dto'
 import { ScheduleFilterType } from '../dtos/schedule/schedule-filter.dto'
-import { ScheduleType } from '../dtos/schedule/schedule.schema'
+import { ScheduleSchema, ScheduleType } from '../dtos/schedule/schedule.schema'
 import { UpdateScheduleType } from '../dtos/schedule/update-schedule.dto'
 import { Op, WhereOptions } from 'sequelize'
 import Patient from '../models/patient.model'
@@ -28,10 +28,11 @@ export class ScheduleRepository {
       Object.entries(filter || {}).filter(([_, v]) => v !== undefined)
     )
 
+    const validKeys = Object.keys(Schedule.getAttributes());
     const where: WhereOptions<Schedule> = {}
 
     Object.keys(validFilter).map(key => {
-      if(key in Schedule) {
+      if(validKeys.includes(key)) {
         where[key as keyof WhereOptions<Schedule>] = validFilter[key]
       }
     })   
@@ -44,6 +45,7 @@ export class ScheduleRepository {
         [Op.between]: [validFilter.initialDate, validFilter.finalDate],
       }
     }
+    
 
     const schedules = await ScheduleModel.findAll({
       where,
