@@ -37,9 +37,7 @@ export class ScheduleController {
         ...req.body
       })
 
-      const { force: auxForce } = req.query
-      console.log(auxForce);
-      
+      const { force: auxForce } = req.query      
       const force = auxForce === "true"
 
       const newSchedule = await this.service.registerSchedule(data, force)
@@ -52,7 +50,10 @@ export class ScheduleController {
         ...req.body
       })
 
-      await this.service.alterSchedule(id, data)
+      const { force: auxForce } = req.query      
+      const force = auxForce === "true"
+
+      await this.service.alterSchedule(id, data, force)
       res.status(204).send()
     })
 
@@ -60,6 +61,13 @@ export class ScheduleController {
       const id = Number(req.params.id)
 
       await this.service.cancelSchedule(id)
+      res.status(204).send()
+    })
+
+    app.patch(`${ScheduleController.pathWithId}/active`, async (req: Request, res: Response) => {
+      const id = Number(req.params.id)
+
+      await this.service.activeSchedule(id)
       res.status(204).send()
     })
 
