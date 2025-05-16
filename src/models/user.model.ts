@@ -1,19 +1,20 @@
 import { DataTypes, Model } from "sequelize";
-import { PatientType } from "../dtos/patient/patient.schema";
-import { CreatePatientType } from "../dtos/patient/create-patient.dto";
 import sequelize from "../config/db-connection";
+import { UserType } from "../dtos/user/user.schema";
+import { CreateUserType } from "../dtos/user/create-user.dto";
 
-class Patient extends Model<PatientType, CreatePatientType> {
+
+class User extends Model<UserType, CreateUserType> {
   declare id: number;
   declare name: string;
   declare email: string;
-  declare phone: string;
-  declare age: number;
+  declare register: string;
+  declare password: string;
   declare createdAt: Date;
   declare updatedAt: Date;
 }
 
-Patient.init({
+User.init({
   id: {
     type: DataTypes.INTEGER.UNSIGNED,
     autoIncrement: true,
@@ -27,19 +28,19 @@ Patient.init({
     type: new DataTypes.STRING(100),
     allowNull: false
   },
-  phone: {
-    type: new DataTypes.STRING(11),
+  password: {
+    type: new DataTypes.STRING(100),
     allowNull: false
   },
-  age: {
-    type: new DataTypes.INTEGER(),
+  register: {
+    type: new DataTypes.CHAR(11),
     allowNull: false
   },
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE,
 }, {
   sequelize,
-  tableName: 'patient'
+  tableName: 'user'
 })
 
-export default Patient
+export default User

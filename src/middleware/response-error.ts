@@ -8,9 +8,11 @@ export default function responseError(
   response: Response,
   _next: NextFunction
 ) {
+  
   if (error instanceof AppError) {
     response.status(error.statusCode).json({
       status: 'error',
+      code: error.code,
       message: error.message,
     });
     return
@@ -24,7 +26,6 @@ export default function responseError(
     return
   }
 
-  //console.error('Internal server error', error);
 
   response.status(500).json({
     status: 'error',

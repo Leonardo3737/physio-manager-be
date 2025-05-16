@@ -8,9 +8,7 @@ export abstract class DTO<Schema extends z.ZodType> {
 
   public constructor (
     data: Record<string, unknown>
-  ) {
-    console.log("aqui", data);
-    
+  ) {    
     this.validate(data)
   }
 
@@ -19,6 +17,7 @@ export abstract class DTO<Schema extends z.ZodType> {
   private validate(data: Record<string, unknown>) {
     try {
       this.data = this.rules().parse(data)
+      
     }
     catch (error) {
       console.log(error);
@@ -33,7 +32,7 @@ export abstract class DTO<Schema extends z.ZodType> {
     return this.data
   }
 
-  public get<Key extends keyof z.infer<Schema>>(key: Key): z.infer<Schema> {
+  public get<Key extends keyof z.infer<Schema>>(key: Key) {
     return this.data[key]
   }
 }

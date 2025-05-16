@@ -13,7 +13,6 @@ export class PatientRepository {
   async createPatient(newPatient: CreatePatientType): Promise<PatientType> {
 
     const process = await Patient.create(newPatient)
-    console.log(process.age);
     
     const patientCreated = new ListPatientDTO({...process.dataValues}).getAll()
 
@@ -32,5 +31,10 @@ export class PatientRepository {
   async listPatientById(id: number): Promise<PatientType | null> {
     const patient = await Patient.findByPk(id)
     return patient
+  }
+
+  async count(): Promise<number> {
+    const total = await Patient.count()
+    return total
   }
 }

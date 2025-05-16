@@ -2,6 +2,7 @@ import { Application, Request, Response } from "express";
 import { PatientService } from "../services/patient.service";
 import { CreatePatientDTO } from "../dtos/patient/create-patient.dto";
 import { UpdatePatientDTO } from "../dtos/patient/update-patient.dto";
+import { getParamsId } from "../utils/get-params-id";
 
 export class PatientController {
 
@@ -14,14 +15,14 @@ export class PatientController {
   ) {
 
     app.delete(PatientController.pathWithId, async (req: Request, res: Response) => {
-      const id = Number(req.params.id)
+      const id = getParamsId(req)
       await this.service.deletePatient(id)
       res.status(204).send()
     })
 
     app.get(PatientController.path, async (req: Request, res: Response) => {
       const data = new UpdatePatientDTO({
-        ...req.body
+        ...req.query
       })
 
       const patients = await this.service.listAllPatients(data)
@@ -29,7 +30,7 @@ export class PatientController {
     })
 
     app.get(PatientController.pathWithId, async (req: Request, res: Response) => {
-      const id = Number(req.params.id)
+      const id = getParamsId(req)
       const patient = await this.service.listPatientById(id)
       res.send(patient)
     })
@@ -43,8 +44,8 @@ export class PatientController {
       res.status(201).send(newPatient)
     })
 
-    app.put(PatientController.pathWithId, async (req: Request, res: Response) => {
-      const id = Number(req.params.id)
+    app.patch(PatientController.pathWithId, async (req: Request, res: Response) => {
+      const id = getParamsId(req)
       const data = new UpdatePatientDTO({
         ...req.body
       })
