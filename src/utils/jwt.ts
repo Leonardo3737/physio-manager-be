@@ -1,4 +1,4 @@
-import jwt, { JwtPayload } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import { UserType } from '../dtos/user/user.schema'
 
 export type PayloadType = {
@@ -10,13 +10,13 @@ export type PayloadType = {
 }
 
 
-export function genJWT<PayloadType>({
+export function genJWT({
   payload,
   expiresDay = 0,
   expiresHour = 0,
   expiresMinute = 0,
 }: {
-  payload: PayloadType,
+  payload: UserType,
   expiresDay?: number,
   expiresHour?: number,
   expiresMinute?: number,
@@ -29,8 +29,11 @@ export function genJWT<PayloadType>({
   expiresDate.setHours(currentDate.getHours() + expiresHour)
   expiresDate.setMinutes(currentDate.getMinutes() + expiresMinute)
 
+
   const auxPayload = {
-    ...payload,
+    sub: payload.id,
+    name: payload.name,
+    email: payload.email,
     iat: currentDate.getTime(),
     exp: expiresDate.getTime()
   }

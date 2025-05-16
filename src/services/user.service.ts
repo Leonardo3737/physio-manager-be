@@ -11,6 +11,7 @@ import axios from "axios"
 import { RequestResetPasswordDTO, ResetPasswordDTO } from "../dtos/user/reset-password"
 import { PasswordResetTokenRepository } from "../repositories/password-reset-token.repository"
 import crypto from 'crypto'
+import { UpdateUserDTO } from "../dtos/user/update-user.dto"
 
 export class UserService {
 
@@ -23,16 +24,20 @@ export class UserService {
 
     const user = newUser.getAll()
 
-    const userWithSameEmail = await this.repository.listUser({ email: user.email })
-
-    if (userWithSameEmail?.length) throw new AppError('There is already a user with this email', 409)
-
-    const userWithSameRegister = await this.repository.listUser({ register: user.register })
-    if (userWithSameRegister?.length) throw new AppError('There is already a user with this register', 409)
+    this.checkConflict(user.email, user.register)
 
     user.password = await encryptPassword(user.password)
 
     return await this.repository.createUser(user)
+  }
+
+  async alterUser(userId: number, newUser: UpdateUserDTO): Promise<void> {
+
+    const user = newUser.getAll()
+
+    this.checkConflict(user.email, user.register)
+
+    await this.repository.alterUser(userId, user)
   }
 
   async deleteUser(id: number): Promise<void> {
@@ -65,7 +70,7 @@ export class UserService {
       throw new AppError('unauthorized', 401)
     }
 
-    const token = genJWT<UserType>({
+    const token = genJWT({
       payload: user,
       expiresDay: 7
     })
@@ -172,5 +177,22 @@ export class UserService {
     catch (err) {
       throw new AppError('fail', 500)
     }
+  }
+
+  private async checkConflict(email?: string, register?: string) {
+    if (email) {
+      const userWithSameEmail = await this.repository.listUser({ email })
+
+      if (userWithSameEmail?.length)
+        throw new AppError('There is already a user with this email', 409)
+    }
+
+    if (register) {
+      const userWithSameRegister = await this.repository.listUser({ register })
+
+      if (userWithSameRegister?.length)
+        throw new AppError('There is already a user with this register', 409)
+    }
+
   }
 }

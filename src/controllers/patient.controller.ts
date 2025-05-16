@@ -44,7 +44,7 @@ export class PatientController {
       res.status(201).send(newPatient)
     })
 
-    app.put(PatientController.pathWithId, async (req: Request, res: Response) => {
+    app.patch(PatientController.pathWithId, async (req: Request, res: Response) => {
       const id = getParamsId(req)
       const data = new UpdatePatientDTO({
         ...req.body

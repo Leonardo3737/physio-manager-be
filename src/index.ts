@@ -13,13 +13,10 @@ const port = Number(process.env.PORT)
 
 const app = express()
 
-
 app.use(express.json())
 app.use(cors())
 
 app.use(authMiddleware)
-
-
 
 controllersStartup(app)
 

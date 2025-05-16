@@ -1,10 +1,15 @@
 import { CreateUserType } from "../dtos/user/create-user.dto";
 import { ListUserDTO, ListUserType } from "../dtos/user/list-user.dto";
+import { UpdateUserType } from "../dtos/user/update-user.dto";
 import { UserAuthType } from "../dtos/user/user-auth.dto";
 import { UserType } from "../dtos/user/user.schema";
 import User from "../models/user.model";
 
 export class UserRepository {
+
+  async alterUser(userId: number, newUserData: UpdateUserType): Promise<void> {
+    await User.update({...newUserData}, {where: {id: userId}})
+  }
 
   async createUser(newUser: CreateUserType): Promise<ListUserType> {
     const process = await User.create(newUser)

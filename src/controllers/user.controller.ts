@@ -5,6 +5,7 @@ import { UserAuthDTO } from "../dtos/user/user-auth.dto";
 import { AppError } from "../config/errors/app.error";
 import { getParamsId } from "../utils/get-params-id";
 import { RequestResetPasswordDTO, ResetPasswordDTO } from "../dtos/user/reset-password";
+import { UpdateUserDTO } from "../dtos/user/update-user.dto";
 
 export class UserController {
 
@@ -42,19 +43,28 @@ export class UserController {
       res.status(201).send(newUser)
     })
 
+    app.patch(UserController.pathWithId, async (req: Request, res: Response) => {
+      const data = new UpdateUserDTO({
+        ...req.body
+      })
+      const userId = getParamsId(req)
+      const newUser = await this.service.alterUser(userId, data)
+      res.status(204).send(newUser)
+    })
+
     app.post(UserController.authPath, async (req: Request, res: Response) => {
       const data = new UserAuthDTO({
         ...req.body
-      })      
+      })
 
       const token = await this.service.userAuth(data)
-      res.status(200).send({token})
+      res.status(200).send({ token })
     })
 
     app.post(UserController.requestResetPasswordPath, async (req: Request, res: Response) => {
       const data = new RequestResetPasswordDTO({
         ...req.body
-      })      
+      })
 
       await this.service.requestResetPassword(data)
 
@@ -64,7 +74,7 @@ export class UserController {
     app.patch(UserController.resetPasswordPath, async (req: Request, res: Response) => {
       const data = new ResetPasswordDTO({
         ...req.body
-      })      
+      })
 
       await this.service.resetPassword(data)
 
