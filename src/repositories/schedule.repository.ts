@@ -7,8 +7,17 @@ import { Op, WhereOptions } from 'sequelize'
 import Patient from '../models/patient.model'
 import Schedule from '../models/schedule.model'
 import ScheduleModel from '../models/schedule.model'
-export class ScheduleRepository {
+import { ScheduleStatus } from '../enum/schedule-status.enum'
 
+interface ICountFilter {
+  rangeDate?: {
+    start: Date,
+    end: Date
+  },
+  status: ScheduleStatus
+}
+
+export class ScheduleRepository {
   async alterSchedule(id: number, newScheduleData: UpdateScheduleType): Promise<void> {
     await ScheduleModel.update({ ...newScheduleData }, { where: { id } })
   }
@@ -32,10 +41,10 @@ export class ScheduleRepository {
     const where: WhereOptions<Schedule> = {}
 
     Object.keys(validFilter).map(key => {
-      if(validKeys.includes(key)) {
+      if (validKeys.includes(key)) {
         where[key as keyof WhereOptions<Schedule>] = validFilter[key]
       }
-    })   
+    })
 
     if (
       validFilter.initialDate instanceof Date &&
@@ -45,7 +54,7 @@ export class ScheduleRepository {
         [Op.between]: [validFilter.initialDate, validFilter.finalDate],
       }
     }
-    
+
 
     const schedules = await ScheduleModel.findAll({
       where,
@@ -74,5 +83,27 @@ export class ScheduleRepository {
       }
     });
     return !!conflictingAppointment;
+  }
+
+  async count(filter?: ICountFilter): Promise<number> {
+
+    const where: WhereOptions<Schedule> = {}
+
+    if (
+      filter?.rangeDate?.end instanceof Date &&
+      filter?.rangeDate?.start instanceof Date
+    ) {
+      where.date = {
+        [Op.between]: [filter.rangeDate.start, filter.rangeDate.end],
+      }
+    }
+
+    if(filter?.status) {
+      where.status = filter.status
+    }
+
+    const total = await ScheduleModel.count({ where })
+
+    return total
   }
 }
