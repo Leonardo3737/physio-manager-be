@@ -4,14 +4,29 @@ import { isJWTValid } from "../utils/jwt";
 import { AppError } from "../config/errors/app.error";
 
 const publicRoutes = [
-  UserController.authPath
+  {
+    path: UserController.path,
+    method: 'POST'
+  },
+  {
+    path: UserController.authPath,
+    method: 'POST'
+  },
+  {
+    path: UserController.resetPasswordPath,
+    method: 'PATCH'
+  },
+  {
+    path: UserController.requestResetPasswordPath,
+    method: 'POST'
+  }
 ]
 
 export function authMiddleware(req: Request, res: Response, next: NextFunction) {
-  const { path } = req
-  const securityPath = path.split('?')[0]
+  const { path, method } = req
+  const securityPath = path.split('?')[0]  
 
-  if(publicRoutes.includes(securityPath)) {
+  if(publicRoutes.find(route => route.path === securityPath && route.method === method)) {
     next()
     return
   }

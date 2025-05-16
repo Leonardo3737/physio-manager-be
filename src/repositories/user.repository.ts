@@ -14,6 +14,11 @@ export class UserRepository {
     return userCreated
   }
 
+  // DEVE SER CHAMDA APENAS EM UserService.resetPassword
+  async resetPassword(id: number, password: string): Promise<void> {
+    await User.update({ password }, { where: { id } })
+  }
+
   async deleteUser(id: number): Promise<void> {
     await User.destroy({ where: { id } })
   }
@@ -27,6 +32,15 @@ export class UserRepository {
     const user = await User.findOne({
       where: {
         register
+      }
+    })
+    return user
+  }
+
+  async listUser(filter: Partial<UserType>): Promise<UserType[] | null> {
+    const user = await User.findAll({
+      where: {
+        ...filter
       }
     })
     return user

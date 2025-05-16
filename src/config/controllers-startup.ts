@@ -12,9 +12,13 @@ import { UserService } from "../services/user.service";
 import { UserController } from "../controllers/user.controller";
 import { DashboardService } from "../services/dashboard.service";
 import { DashboardController } from "../controllers/dashboard.controller";
+import { PasswordResetTokenRepository } from "../repositories/password-reset-token.repository";
 
 
 export function controllersStartup(app: Application) {
+
+  /* PASSWORD-RESET-TOKEN */
+  const passwordResetTokenRepository = new PasswordResetTokenRepository()
 
   /* PATIENT */
   const patientRespository = new PatientRepository()
@@ -28,7 +32,7 @@ export function controllersStartup(app: Application) {
 
   /* USER */
   const userRespository = new UserRepository()
-  const userService = new UserService(userRespository)
+  const userService = new UserService(userRespository, passwordResetTokenRepository)
   new UserController(app, userService)
 
   /* DASHBOARD */

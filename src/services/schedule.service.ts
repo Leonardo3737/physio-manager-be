@@ -97,6 +97,7 @@ export class ScheduleService {
     await this.repository.deleteSchedule(id)
   }
 
+
   // ----------> UTILS <----------
 
   private isNumber(value: unknown) {
