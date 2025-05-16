@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { UserController } from "../controllers/user.controller";
 import { isJWTValid } from "../utils/jwt";
 import { AppError } from "../config/errors/app.error";
-import { getParamsId } from "../utils/get-params-id";
 
 const publicRoutes = [
   {
@@ -46,6 +45,9 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction) 
     const separedPath = pathWithoutQuery.split('/')
 
     const paramId = Number(separedPath.find(node => node && !isNaN(Number(node))))
+
+    console.log(paramId);
+    
 
     if (paramId && paramId !== Number(jwtPayload.sub)) {
       throw new AppError('You are not allowed to access this resource', 403, 'FORBIDDEN');

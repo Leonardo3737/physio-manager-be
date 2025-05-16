@@ -43,15 +43,6 @@ export class UserController {
       res.status(201).send(newUser)
     })
 
-    app.patch(UserController.pathWithId, async (req: Request, res: Response) => {
-      const data = new UpdateUserDTO({
-        ...req.body
-      })
-      const userId = getParamsId(req)
-      const newUser = await this.service.alterUser(userId, data)
-      res.status(204).send(newUser)
-    })
-
     app.post(UserController.authPath, async (req: Request, res: Response) => {
       const data = new UserAuthDTO({
         ...req.body
@@ -79,6 +70,15 @@ export class UserController {
       await this.service.resetPassword(data)
 
       res.status(204).send()
+    })
+
+    app.patch(UserController.pathWithId, async (req: Request, res: Response) => {
+      const data = new UpdateUserDTO({
+        ...req.body
+      })
+      const userId = getParamsId(req)
+      const newUser = await this.service.alterUser(userId, data)
+      res.status(204).send(newUser)
     })
 
   }

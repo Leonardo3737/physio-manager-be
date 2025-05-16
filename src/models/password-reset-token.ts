@@ -25,11 +25,6 @@ PasswordResetToken.init({
     type: DataTypes.STRING(8),
     allowNull: false,
   },
-  used: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-    defaultValue: false
-  },
   expiresAt: {
     type: DataTypes.DATE,
     allowNull: false

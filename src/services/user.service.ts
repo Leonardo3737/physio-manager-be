@@ -96,13 +96,14 @@ export class UserService {
     if (!passwordResetToken)
       throw new AppError('invalid token', 401)
 
+    await this.passwordResetTokenRepository.deletePasswordResetToken(passwordResetToken.id)
+    
     if (new Date(passwordResetToken.expiresAt) < new Date())
       throw new AppError('token expired', 403)
 
     const newEncriptedPassword = await encryptPassword(newPassword)
 
     await this.repository.resetPassword(user.id, newEncriptedPassword)
-    await this.passwordResetTokenRepository.deletePasswordResetToken(passwordResetToken.id)
   }
 
 
