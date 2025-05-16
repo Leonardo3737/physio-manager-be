@@ -9,6 +9,7 @@ export class UserController {
 
   static path = '/user'
   static pathWithId = `${UserController.path}/:id`
+  static authPath = `${UserController.path}/auth`
 
   constructor(
     private app: Application,
@@ -37,7 +38,7 @@ export class UserController {
       res.status(201).send(newUser)
     })
 
-    app.post(`${UserController.path}/auth`, async (req: Request, res: Response) => {
+    app.post(UserController.authPath, async (req: Request, res: Response) => {
       const data = new UserAuthDTO({
         ...req.body
       })      
