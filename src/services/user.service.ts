@@ -7,7 +7,7 @@ import { UserRepository } from "../repositories/user.repository"
 import { encryptPassword } from "../utils/encrypt"
 import bcrypt from 'bcrypt'
 import { genJWT } from "../utils/jwt"
-import axios from "axios"
+import nodemailer from 'nodemailer'
 import { RequestResetPasswordDTO, ResetPasswordDTO } from "../dtos/user/reset-password"
 import { PasswordResetTokenRepository } from "../repositories/password-reset-token.repository"
 import crypto from 'crypto'
@@ -134,6 +134,7 @@ export class UserService {
     try {
       await this.sendResetPasswordEmail(email, token)
     } catch (err) {
+      console.log(err);
 
       await this.passwordResetTokenRepository.deletePasswordResetToken(passwordResetToken.id)
 
@@ -145,36 +146,26 @@ export class UserService {
   }
 
   private async sendResetPasswordEmail(email: string, token: string) {
-
-    const url = 'https://api.brevo.com/v3/smtp/email'
-    const body = {
-      sender: {
-        name: "physio-manager",
-        email: process.env.SENDER_EMAIL,
-      },
-      to: [
-        { name: email, email }
-      ],
-      subject: 'Recuperar senha',
-      htmlContent: `
-      <!DOCTYPE html> 
-      <html> 
-        <body> 
-          <p>Token para recuperação de senha: <b>${token}</b></p> 
-        </body>
-      </html>
-      `,
-    }
-
-    const headers = {
-      'api-key': process.env.EMAIL_API_KEY
-    }
-
     try {
-      await axios.post(url, body, { headers })
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: Number(process.env.SMTP_PORT),
+        secure: false,
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASSWORD,
+        },
+      })
+      await transporter.sendMail({
+        from: `"physio-manager" <${process.env.SENDER_EMAIL}>`,
+        to: email,
+        subject: 'Recuperar senha',
+        html: `<p>Token para recuperação de senha: <b>${token}</b></p>`,
+      })
       return
     }
     catch (err) {
+      console.log(err)
       throw new AppError('fail', 500)
     }
   }
