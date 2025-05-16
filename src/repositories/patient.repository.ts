@@ -32,4 +32,9 @@ export class PatientRepository {
     const patient = await Patient.findByPk(id)
     return patient
   }
+
+  async count(): Promise<number> {
+    const total = await Patient.count()
+    return total
+  }
 }

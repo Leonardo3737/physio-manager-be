@@ -10,6 +10,8 @@ import { ScheduleController } from "../controllers/schedule.controller";
 import { UserRepository } from "../repositories/user.repository";
 import { UserService } from "../services/user.service";
 import { UserController } from "../controllers/user.controller";
+import { DashboardService } from "../services/dashboard.service";
+import { DashboardController } from "../controllers/dashboard.controller";
 
 
 export function controllersStartup(app: Application) {
@@ -18,7 +20,7 @@ export function controllersStartup(app: Application) {
   const patientRespository = new PatientRepository()
   const patientService = new PatientService(patientRespository)
   new PatientController(app, patientService)
-  
+
   /* SCHEDULE */
   const scheduleRespository = new ScheduleRepository()
   const scheduleService = new ScheduleService(scheduleRespository)
@@ -28,5 +30,9 @@ export function controllersStartup(app: Application) {
   const userRespository = new UserRepository()
   const userService = new UserService(userRespository)
   new UserController(app, userService)
+
+  /* DASHBOARD */
+  const dashboardService = new DashboardService(scheduleRespository, patientRespository)
+  new DashboardController(app, dashboardService)
 
 }
