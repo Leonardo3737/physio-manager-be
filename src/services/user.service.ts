@@ -150,7 +150,7 @@ export class UserService {
     const body = {
       sender: {
         name: "physio-manager",
-        email: "leovinicius3737@gmail.com",
+        email: process.env.SENDER_EMAIL,
       },
       to: [
         { name: email, email }
