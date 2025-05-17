@@ -8,7 +8,9 @@ export default function responseError(
   response: Response,
   _next: NextFunction
 ) {
-  
+
+  console.log(error);
+
   if (error instanceof AppError) {
     response.status(error.statusCode).json({
       status: 'error',
@@ -17,7 +19,7 @@ export default function responseError(
     });
     return
   }
-  if (error instanceof ValidationError) {    
+  if (error instanceof ValidationError) {
     response.status(error.statusCode).json({
       status: 'error',
       message: error.message, // vou mostrar as duas formas
