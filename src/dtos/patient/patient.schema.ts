@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { DTO } from '../dto';
 
 export const PatientSchema = z.object({
   id: z.number(),
@@ -11,3 +12,9 @@ export const PatientSchema = z.object({
 })
 
 export type PatientType = z.infer<typeof PatientSchema>
+
+export class PatientDTO extends DTO<typeof PatientSchema> {
+  protected rules() {
+    return PatientSchema
+  }
+}
