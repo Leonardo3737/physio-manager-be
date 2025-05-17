@@ -5,6 +5,7 @@ import { PatientSchema } from '../patient/patient.schema'
 export const ScheduleSchema = z.object({
   id: z.number(),
   patientId: z.number(),
+  appointmentTypeId: z.number(),  
   patient: PatientSchema.optional(),
   date: z.coerce.date(),
   notes: z.string().nullable().optional(),
