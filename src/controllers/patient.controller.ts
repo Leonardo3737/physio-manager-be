@@ -3,6 +3,7 @@ import { PatientService } from "../services/patient.service";
 import { CreatePatientDTO } from "../dtos/patient/create-patient.dto";
 import { UpdatePatientDTO } from "../dtos/patient/update-patient.dto";
 import { getParamsId } from "../utils/get-params-id";
+import { FilterPatientDTO } from '../dtos/patient/filter-patient.dto';
 
 export class PatientController {
 
@@ -21,7 +22,7 @@ export class PatientController {
     })
 
     app.get(PatientController.path, async (req: Request, res: Response) => {
-      const data = new UpdatePatientDTO({
+      const data = new FilterPatientDTO({
         ...req.query
       })
 

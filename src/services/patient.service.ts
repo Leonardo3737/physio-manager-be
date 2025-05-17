@@ -1,5 +1,7 @@
 import { AppError } from "../config/errors/app.error"
-import { CreatePatientDTO, CreatePatientType } from "../dtos/patient/create-patient.dto"
+import { CreatePatientDTO } from "../dtos/patient/create-patient.dto"
+import { FilterPatientDTO } from '../dtos/patient/filter-patient.dto'
+import { ListPatientType } from '../dtos/patient/list-patient.dto'
 import { PatientType } from "../dtos/patient/patient.schema"
 import { UpdatePatientDTO } from "../dtos/patient/update-patient.dto"
 import { PatientRepository } from "../repositories/patient.repository"
@@ -15,7 +17,7 @@ export class PatientService {
     await this.repository.alterPatient(id, newPatientData.getAll())
   }
 
-  async registerPatient(newPatient: CreatePatientDTO): Promise<PatientType> {    
+  async registerPatient(newPatient: CreatePatientDTO): Promise<PatientType> {
     return await this.repository.createPatient(newPatient.getAll())
   }
 
@@ -24,14 +26,14 @@ export class PatientService {
     await this.repository.deletePatient(id)
   }
 
-  async listAllPatients(filter?: UpdatePatientDTO): Promise<PatientType[]> {
+  async listAllPatients(filter?: FilterPatientDTO): Promise<ListPatientType> {
     return await this.repository.listAllPatients(filter?.getAll())
   }
-  
+
   async listPatientById(id: number): Promise<PatientType> {
     const patient = await this.repository.listPatientById(id)
 
-    if(!patient) {
+    if (!patient) {
       throw new AppError('Patient not found', 404)
     }
 
