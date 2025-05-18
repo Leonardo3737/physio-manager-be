@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
+import { AppointmentTypeFilterType } from '../dtos/appointment-type/appointment-type-filter.dto';
 import { CreateAppointmentTypeDTO } from '../dtos/appointment-type/create-appointment-type.dto';
-import { FilterAppointmentTypeType } from '../dtos/appointment-type/filter-appointment-type.dto';
 import { ListAppointmentTypeType } from '../dtos/appointment-type/list-appointment-type.dto';
 import { UpdateAppointmentTypeDTO } from '../dtos/appointment-type/update-appointment-type.dto';
 import AppointmentType from '../models/appointment-type.model';
@@ -26,7 +26,7 @@ export class AppointmentTypeRepository {
     });
   }
 
-  async findAll(filter?: FilterAppointmentTypeType): Promise<ListAppointmentTypeType> {
+  async findAll(filter?: AppointmentTypeFilterType): Promise<ListAppointmentTypeType> {
     const { name, page = 1, perPage = 10 } = filter || {}
 
     const offset = (page - 1) * perPage

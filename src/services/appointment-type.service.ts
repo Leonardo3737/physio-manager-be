@@ -1,7 +1,7 @@
 // src/services/appointment-type.service.ts
 import { AppError } from '../config/errors/app.error';
+import { AppointmentTypeFilterDTO } from '../dtos/appointment-type/appointment-type-filter.dto';
 import { CreateAppointmentTypeDTO } from '../dtos/appointment-type/create-appointment-type.dto';
-import { FilterAppointmentTypeDTO } from '../dtos/appointment-type/filter-appointment-type.dto';
 import { UpdateAppointmentTypeDTO } from '../dtos/appointment-type/update-appointment-type.dto';
 import { AppointmentTypeRepository } from '../repositories/appointment-type.repository';
 
@@ -30,7 +30,7 @@ export class AppointmentTypeService {
     return appointmentType;
   }
 
-  async findAll(filter: FilterAppointmentTypeDTO) {
+  async findAll(filter: AppointmentTypeFilterDTO) {
     return this.repository.findAll(filter.getAll());
   }
 }
