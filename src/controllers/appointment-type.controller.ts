@@ -1,44 +1,49 @@
 // src/controllers/appointment-type.controller.ts
-import { Request, Response } from "express";
-import { AppointmentTypeService } from "../services/appointment-type.service";
+import { Application, Request, Response } from "express";
 import { CreateAppointmentTypeDTO } from "../dtos/appointment-type/create-appointment-type.dto";
+import { FilterAppointmentTypeDTO } from '../dtos/appointment-type/filter-appointment-type.dto';
 import { UpdateAppointmentTypeDTO } from "../dtos/appointment-type/update-appointment-type.dto";
-import { ListAppointmentTypeDTO } from "../dtos/appointment-type/list-appointment-type.dto";
+import { AppointmentTypeService } from "../services/appointment-type.service";
 import { getParamsId } from "../utils/get-params-id";
 
 export class AppointmentTypeController {
-  constructor(private service: AppointmentTypeService) {}
 
-  async index(req: Request, res: Response) {
-    const data = new ListAppointmentTypeDTO({ ...req.query });
-    const filters = data.getAll(); 
-    const appointmentTypes = await this.service.findAll(filters);
-    return res.json(appointmentTypes);
-  }
+  static path = '/appointment-type'
+  static pathWithId = `${AppointmentTypeController.path}/:id`
 
-  async show(req: Request, res: Response) {
-    const id = getParamsId(req);
-    const appointmentType = await this.service.findById(id);
-    if (!appointmentType) return res.status(404).json({ message: 'Not found' });
-    return res.json(appointmentType);
-  }
+  constructor(
+    private app: Application,
+    private service: AppointmentTypeService
+  ) {
+    app.get(AppointmentTypeController.path, async (req: Request, res: Response) => {
+      const filters = new FilterAppointmentTypeDTO({ ...req.query });
+      const appointmentTypes = await this.service.findAll(filters);
+      res.send(appointmentTypes);
+    });
 
-  async store(req: Request, res: Response) {
-    const data = new CreateAppointmentTypeDTO({ ...req.body });
-    const newAppointmentType = await this.service.create(data);
-    return res.status(201).json(newAppointmentType);
-  }
+    app.get(AppointmentTypeController.pathWithId, async (req: Request, res: Response) => {
+      const id = getParamsId(req);
+      const appointmentType = await this.service.findById(id);
+      res.send(appointmentType);
+    });
 
-  async update(req: Request, res: Response) {
-    const id = getParamsId(req);
-    const data = new UpdateAppointmentTypeDTO({ ...req.body });
-    const updated = await this.service.update(id, data);
-    return res.json(updated);
-  }
+    app.post(AppointmentTypeController.path, async (req: Request, res: Response) => {
+      const data = new CreateAppointmentTypeDTO({ ...req.body });
+      const newAppointmentType = await this.service.create(data);
+      res.status(201).send(newAppointmentType);
+    });
 
-  async destroy(req: Request, res: Response) {
-    const id = getParamsId(req);
-    await this.service.delete(id);
-    return res.status(204).send();
+    app.patch(AppointmentTypeController.pathWithId, async (req: Request, res: Response) => {
+      const id = getParamsId(req);
+      const data = new UpdateAppointmentTypeDTO({ ...req.body });
+      await this.service.update(id, data);
+      res.status(204).send();
+    });
+
+    app.delete(AppointmentTypeController.pathWithId, async (req: Request, res: Response) => {
+      const id = getParamsId(req);
+      await this.service.delete(id);
+      res.status(204).send();
+    });
   }
 }

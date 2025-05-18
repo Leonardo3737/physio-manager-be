@@ -1,21 +1,9 @@
 import { DataTypes, Model } from 'sequelize';
-import Schedule from './schedule.model'
 import sequelize from '../config/db-connection';
+import { AppointmentTypeType } from '../dtos/appointment-type/appointment-type-schema';
+import { CreateAppointmentTypeType } from '../dtos/appointment-type/create-appointment-type.dto';
 
-export interface AppointmentTypeAttributes {
-    id: number;
-    name: string;
-    description?: string | null;
-    createdAt?: Date;
-    updatedAt?: Date;
-}
-
-export interface AppointmentTypeCreationAttributes {
-    name: string;
-    description?: string | null;
-}
-
-class AppointmentType extends Model<AppointmentTypeAttributes, AppointmentTypeCreationAttributes> implements AppointmentTypeAttributes {
+class AppointmentType extends Model<AppointmentTypeType, CreateAppointmentTypeType> {
     declare id: number;
     declare name: string;
     declare description: string | null;
@@ -37,7 +25,7 @@ AppointmentType.init({
         type: DataTypes.STRING(255),
         allowNull: true
     },
-    
+
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE
 }, {
@@ -46,10 +34,6 @@ AppointmentType.init({
     modelName: 'AppointmentType',
     timestamps: true,
     underscored: true
-});
-AppointmentType.hasMany(Schedule, {
-    foreignKey: 'appointment_type_id',
-    as: 'schedules'
 });
 
 export default AppointmentType;

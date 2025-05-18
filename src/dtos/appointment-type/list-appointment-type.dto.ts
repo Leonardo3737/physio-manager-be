@@ -1,10 +1,9 @@
 import { z } from 'zod'
 import { DTO } from '../dto'
+import { ResponseSchema } from '../response/response.schema'
+import { AppointmentTypeSchema } from './appointment-type-schema'
 
-export const ListAppointmentTypeSchema = z.object({
-  page: z.coerce.number().int().min(1).optional(),
-  perPage: z.coerce.number().int().min(1).max(100).optional()
-})
+export const ListAppointmentTypeSchema = ResponseSchema(AppointmentTypeSchema)
 
 export type ListAppointmentTypeType = z.infer<typeof ListAppointmentTypeSchema>
 

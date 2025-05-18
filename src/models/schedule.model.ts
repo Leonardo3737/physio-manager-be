@@ -1,10 +1,10 @@
 import { DataTypes, Model } from 'sequelize';
-import { ScheduleType } from '../dtos/schedule/schedule.schema';
-import { CreateScheduleType } from '../dtos/schedule/create-schedule.dto';
 import sequelize from '../config/db-connection';
+import { CreateScheduleType } from '../dtos/schedule/create-schedule.dto';
+import { ScheduleType } from '../dtos/schedule/schedule.schema';
 import { ScheduleStatus } from '../enum/schedule-status.enum';
-import Patient from './patient.model';
 import AppointmentType from './appointment-type.model';
+import Patient from './patient.model';
 
 class Schedule extends Model<ScheduleType, CreateScheduleType> {
   declare id: number;
@@ -80,6 +80,11 @@ Patient.hasMany(Schedule, {
 Schedule.belongsTo(AppointmentType, {
   foreignKey: 'appointment_type_id',
   as: 'appointmentType'
+});
+
+AppointmentType.hasMany(Schedule, {
+  foreignKey: 'appointment_type_id',
+  as: 'schedules'
 });
 
 export default Schedule;

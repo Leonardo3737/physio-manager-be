@@ -1,11 +1,9 @@
-import AppointmentType from '../models/appointment-type.model';
+import { Op } from 'sequelize';
 import { CreateAppointmentTypeDTO } from '../dtos/appointment-type/create-appointment-type.dto';
+import { FilterAppointmentTypeType } from '../dtos/appointment-type/filter-appointment-type.dto';
+import { ListAppointmentTypeType } from '../dtos/appointment-type/list-appointment-type.dto';
 import { UpdateAppointmentTypeDTO } from '../dtos/appointment-type/update-appointment-type.dto';
-
-interface PaginationFilter {
-  page?: number;
-  perPage?: number;
-}
+import AppointmentType from '../models/appointment-type.model';
 
 export class AppointmentTypeRepository {
   async create(data: CreateAppointmentTypeDTO) {
@@ -16,12 +14,10 @@ export class AppointmentTypeRepository {
     await AppointmentType.update(data.getAll(), {
       where: { id }
     });
-
-    return this.findById(id);
   }
 
   async delete(id: number) {
-    return await AppointmentType.destroy({ where: { id } });
+    await AppointmentType.destroy({ where: { id } });
   }
 
   async findById(id: number) {
@@ -30,22 +26,38 @@ export class AppointmentTypeRepository {
     });
   }
 
-  async findAll(filter?: PaginationFilter) {
-    const page = filter?.page ?? 1;
-    const perPage = filter?.perPage ?? 10;
-    const offset = (page - 1) * perPage;
+  async findAll(filter?: FilterAppointmentTypeType): Promise<ListAppointmentTypeType> {
+    const { name, page = 1, perPage = 10 } = filter || {}
 
-    const { rows, count } = await AppointmentType.findAndCountAll({
+    const offset = (page - 1) * perPage
+    const limit = perPage
+
+    const result = await AppointmentType.findAndCountAll({
+      where: {
+        ...(name && { name: { [ Op.iLike ]: `%${name}%` } })
+      },
       offset,
-      limit: perPage,
-      order: [['createdAt', 'DESC']]
+      limit,
+      order: [ [ 'id', 'DESC' ] ]
     });
 
+    const total = result.count
+    const totalPagesCalc = Math.ceil(total / perPage)
+
+    const from = offset + 1
+    const to = offset + result.rows.length
+
     return {
-      data: rows,
-      total: count,
-      page,
-      perPage
-    };
+      data: result.rows,
+      meta: {
+        page,
+        perPage,
+        from,
+        to,
+        count: result.rows.length,
+        hasMore: page < totalPagesCalc,
+        lastPage: totalPagesCalc,
+      },
+    }
   }
 }
