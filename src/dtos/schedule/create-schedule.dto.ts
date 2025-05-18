@@ -1,6 +1,6 @@
-import { z } from 'zod'
-import { ScheduleSchema } from './schedule.schema'
-import { DTO } from '../dto'
+import { z } from 'zod';
+import { DTO } from '../dto';
+import { ScheduleSchema } from './schedule.schema';
 
 export const CreateScheduleSchema = ScheduleSchema.omit({
   id: true,
@@ -11,8 +11,7 @@ export const CreateScheduleSchema = ScheduleSchema.omit({
 }).extend({
   status: ScheduleSchema.shape.status.optional(),
   initialDiscomfort: ScheduleSchema.shape.initialDiscomfort.optional().nullable(),
-  finalDiscomfort: ScheduleSchema.shape.finalDiscomfort.optional().nullable(),
-  appointmentTypeId: ScheduleSchema.shape.appointmentTypeId, 
+  finalDiscomfort: ScheduleSchema.shape.finalDiscomfort.optional().nullable()
 });
 
 export type CreateScheduleType = z.infer<typeof CreateScheduleSchema>
