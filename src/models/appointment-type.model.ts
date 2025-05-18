@@ -1,6 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/db-connection';
-import { AppointmentTypeType } from '../dtos/appointment-type/appointment-type-schema';
+import { AppointmentTypeType } from '../dtos/appointment-type/appointment-type.schema';
 import { CreateAppointmentTypeType } from '../dtos/appointment-type/create-appointment-type.dto';
 
 class AppointmentType extends Model<AppointmentTypeType, CreateAppointmentTypeType> {

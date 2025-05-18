@@ -28,12 +28,10 @@ Schedule.init({
   patientId: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    field: 'patient_id'
   },
   appointmentTypeId: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    field: 'appointment_type_id'
   },
   date: {
     type: DataTypes.DATE,
@@ -42,12 +40,10 @@ Schedule.init({
   finalDiscomfort: {
     type: DataTypes.SMALLINT,
     allowNull: true,
-    field: 'final_discomfort'
   },
   initialDiscomfort: {
     type: DataTypes.SMALLINT,
     allowNull: true,
-    field: 'initial_discomfort'
   },
   notes: {
     type: DataTypes.STRING,
@@ -68,12 +64,12 @@ Schedule.init({
 });
 
 Schedule.belongsTo(Patient, {
-  foreignKey: 'patient_id',
+  foreignKey: 'patientId',
   as: 'patient'
 });
 
 Patient.hasMany(Schedule, {
-  foreignKey: 'patient_id',
+  foreignKey: 'patientId',
   as: 'schedules'
 });
 
@@ -83,7 +79,7 @@ Schedule.belongsTo(AppointmentType, {
 });
 
 AppointmentType.hasMany(Schedule, {
-  foreignKey: 'appointment_type_id',
+  foreignKey: 'appointmentTypeId',
   as: 'schedules'
 });
 

@@ -1,13 +1,13 @@
+import { Op, WhereOptions } from 'sequelize'
 import { CreateScheduleType } from '../dtos/schedule/create-schedule.dto'
 import { ListScheduleDTO, ListScheduleType } from '../dtos/schedule/list-schedule.dto'
 import { ScheduleFilterType } from '../dtos/schedule/schedule-filter.dto'
-import { ScheduleSchema, ScheduleType } from '../dtos/schedule/schedule.schema'
+import { ScheduleType } from '../dtos/schedule/schedule.schema'
 import { UpdateScheduleType } from '../dtos/schedule/update-schedule.dto'
-import { Op, WhereOptions } from 'sequelize'
-import Patient from '../models/patient.model'
-import Schedule from '../models/schedule.model'
-import ScheduleModel from '../models/schedule.model'
 import { ScheduleStatus } from '../enum/schedule-status.enum'
+import AppointmentType from '../models/appointment-type.model'
+import Patient from '../models/patient.model'
+import { default as Schedule, default as ScheduleModel } from '../models/schedule.model'
 
 interface ICountFilter {
   rangeDate?: {
@@ -34,7 +34,7 @@ export class ScheduleRepository {
 
   async listAllSchedules(filter?: ScheduleFilterType): Promise<ScheduleType[]> {
     const validFilter = Object.fromEntries(
-      Object.entries(filter || {}).filter(([_, v]) => v !== undefined)
+      Object.entries(filter || {}).filter(([ _, v ]) => v !== undefined)
     )
 
     const validKeys = Object.keys(Schedule.getAttributes());
@@ -42,7 +42,7 @@ export class ScheduleRepository {
 
     Object.keys(validFilter).map(key => {
       if (validKeys.includes(key)) {
-        where[key as keyof WhereOptions<Schedule>] = validFilter[key]
+        where[ key as keyof WhereOptions<Schedule> ] = validFilter[ key ]
       }
     })
 
@@ -51,7 +51,7 @@ export class ScheduleRepository {
       validFilter.finalDate instanceof Date
     ) {
       where.date = {
-        [Op.between]: [validFilter.initialDate, validFilter.finalDate],
+        [ Op.between ]: [ validFilter.initialDate, validFilter.finalDate ],
       }
     }
 
@@ -62,9 +62,13 @@ export class ScheduleRepository {
         {
           model: Patient,
           as: 'patient'
-        }
+        },
+        {
+          model: AppointmentType,
+          as: 'appointmentType'
+        },
       ],
-      order: [['date', 'ASC']],
+      order: [ [ 'date', 'ASC' ] ],
     },
     )
     return schedules
@@ -94,11 +98,11 @@ export class ScheduleRepository {
       filter?.rangeDate?.start instanceof Date
     ) {
       where.date = {
-        [Op.between]: [filter.rangeDate.start, filter.rangeDate.end],
+        [ Op.between ]: [ filter.rangeDate.start, filter.rangeDate.end ],
       }
     }
 
-    if(filter?.status) {
+    if (filter?.status) {
       where.status = filter.status
     }
 

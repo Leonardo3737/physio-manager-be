@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { DTO } from '../dto';
-import { AppointmentTypeSchema } from './appointment-type-schema';
+import { AppointmentTypeSchema } from './appointment-type.schema';
 
 export const AppointmentTypeFilterSchema = AppointmentTypeSchema.pick({
   name: true,
