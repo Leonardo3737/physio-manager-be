@@ -12,8 +12,8 @@ export const CreateScheduleSchema = ScheduleSchema.omit({
   status: ScheduleSchema.shape.status.optional(),
   initialDiscomfort: ScheduleSchema.shape.initialDiscomfort.optional().nullable(),
   finalDiscomfort: ScheduleSchema.shape.finalDiscomfort.optional().nullable(),
+  appointmentTypeId: ScheduleSchema.shape.appointmentTypeId, 
 });
-
 
 export type CreateScheduleType = z.infer<typeof CreateScheduleSchema>
 
