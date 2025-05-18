@@ -1,7 +1,7 @@
 // src/controllers/appointment-type.controller.ts
 import { Application, Request, Response } from "express";
+import { AppointmentTypeFilterDTO } from '../dtos/appointment-type/appointment-type-filter.dto';
 import { CreateAppointmentTypeDTO } from "../dtos/appointment-type/create-appointment-type.dto";
-import { FilterAppointmentTypeDTO } from '../dtos/appointment-type/filter-appointment-type.dto';
 import { UpdateAppointmentTypeDTO } from "../dtos/appointment-type/update-appointment-type.dto";
 import { AppointmentTypeService } from "../services/appointment-type.service";
 import { getParamsId } from "../utils/get-params-id";
@@ -16,7 +16,7 @@ export class AppointmentTypeController {
     private service: AppointmentTypeService
   ) {
     app.get(AppointmentTypeController.path, async (req: Request, res: Response) => {
-      const filters = new FilterAppointmentTypeDTO({ ...req.query });
+      const filters = new AppointmentTypeFilterDTO({ ...req.query });
       const appointmentTypes = await this.service.findAll(filters);
       res.send(appointmentTypes);
     });
