@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { DTO } from '../dto'
 import { ResponseSchema } from '../response/response.schema'
-import { AppointmentTypeSchema } from './appointment-type-schema'
+import { AppointmentTypeSchema } from './appointment-type.schema'
 
 export const ListAppointmentTypeSchema = ResponseSchema(AppointmentTypeSchema)
 

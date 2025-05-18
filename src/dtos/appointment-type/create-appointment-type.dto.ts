@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { AppointmentTypeSchema } from './appointment-type-schema'
 import { DTO } from '../dto'
+import { AppointmentTypeSchema } from './appointment-type.schema'
 
 export const CreateAppointmentTypeSchema = AppointmentTypeSchema.omit({
   id: true,
