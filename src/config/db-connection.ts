@@ -10,7 +10,7 @@ export default sequelize
 export async function DBconnectionTest() {
   try {
     await sequelize.authenticate();
-    await sequelize.sync({ alter: environment === 'localhaaost' });
+    await sequelize.sync({ alter: environment === 'localhost' });
     console.log('Connection has been established successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
