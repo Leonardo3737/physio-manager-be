@@ -24,7 +24,7 @@ export class UserService {
 
     const user = newUser.getAll()
 
-    this.checkConflict(user.email, user.register)
+    await this.checkConflict(user.email, user.register)
 
     user.password = await encryptPassword(user.password)
 
@@ -35,7 +35,7 @@ export class UserService {
 
     const user = newUser.getAll()
 
-    this.checkConflict(user.email, user.register)
+    await this.checkConflict(user.email, user.register)
 
     await this.repository.alterUser(userId, user)
   }
@@ -175,15 +175,17 @@ export class UserService {
     if (email) {
       const userWithSameEmail = await this.repository.listUser({ email })
 
-      if (userWithSameEmail?.length)
+      if (userWithSameEmail?.length){        
         throw new AppError('There is already a user with this email', 409)
+      }
     }
-
+    
     if (register) {
       const userWithSameRegister = await this.repository.listUser({ register })
-
-      if (userWithSameRegister?.length)
+      
+      if (userWithSameRegister?.length) {
         throw new AppError('There is already a user with this register', 409)
+      }
     }
 
   }

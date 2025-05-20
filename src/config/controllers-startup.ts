@@ -3,9 +3,9 @@ import { PatientController } from "../controllers/patient.controller";
 import { PatientRepository } from "../repositories/patient.repository";
 import { PatientService } from "../services/patient.service";
 
-import { ScheduleController } from "../controllers/schedule.controller";
-import { ScheduleRepository } from "../repositories/schedule.repository";
-import { ScheduleService } from "../services/schedule.service";
+import { AppointmentController } from "../controllers/appointment.controller";
+import { AppointmentRepository } from "../repositories/appointment.repository";
+import { AppointmentService } from "../services/appointment.service";
 
 import { AppointmentTypeController } from '../controllers/appointment-type.controller';
 import { DashboardController } from "../controllers/dashboard.controller";
@@ -33,10 +33,10 @@ export function controllersStartup(app: Application) {
   const appointmentTypeService = new AppointmentTypeService(appointmentTypeRespository)
   new AppointmentTypeController(app, appointmentTypeService)
 
-  /* SCHEDULE */
-  const scheduleRespository = new ScheduleRepository()
-  const scheduleService = new ScheduleService(scheduleRespository)
-  new ScheduleController(app, scheduleService)
+  /* APPOINTMENT */
+  const appointmentRespository = new AppointmentRepository()
+  const appointmentService = new AppointmentService(appointmentRespository)
+  new AppointmentController(app, appointmentService)
 
   /* USER */
   const userRespository = new UserRepository()
@@ -44,7 +44,7 @@ export function controllersStartup(app: Application) {
   new UserController(app, userService)
 
   /* DASHBOARD */
-  const dashboardService = new DashboardService(scheduleRespository, patientRespository)
+  const dashboardService = new DashboardService(appointmentRespository, patientRespository)
   new DashboardController(app, dashboardService)
 
 

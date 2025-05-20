@@ -15,31 +15,32 @@ class Patient extends Model<PatientType, CreatePatientType> {
 
 Patient.init({
   id: {
-    type: DataTypes.INTEGER.UNSIGNED,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
   name: {
-    type: new DataTypes.STRING(100),
+    type: DataTypes.STRING(100),
     allowNull: false
   },
   email: {
-    type: new DataTypes.STRING(100),
+    type: DataTypes.STRING(100),
     allowNull: false
   },
   phone: {
-    type: new DataTypes.STRING(11),
+    type: DataTypes.STRING(11),
     allowNull: false
   },
-  age: {
-    type: new DataTypes.INTEGER(),
+  birthday: {
+    type: DataTypes.DATE,
     allowNull: false
   },
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE,
 }, {
   sequelize,
-  tableName: 'patient'
+  tableName: 'patient',
+  underscored: true
 })
 
 export default Patient

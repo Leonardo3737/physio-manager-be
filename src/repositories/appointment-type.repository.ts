@@ -22,7 +22,7 @@ export class AppointmentTypeRepository {
 
   async findById(id: number) {
     return await AppointmentType.findByPk(id, {
-      include: { association: 'schedules' }
+      include: { association: 'appointments' }
     });
   }
 

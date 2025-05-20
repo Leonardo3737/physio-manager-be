@@ -1,19 +1,19 @@
 import { z } from 'zod'
-import { ScheduleStatus } from '../../enum/schedule-status.enum'
 import { PatientSchema } from '../patient/patient.schema'
+import { AppointmentStatus } from '../../enum/appointment-status.enum'
 
-export const ScheduleSchema = z.object({
+export const AppointmentSchema = z.object({
   id: z.number(),
   patientId: z.number(),
   appointmentTypeId: z.number(),  
-  patient: PatientSchema.optional(),
+  patient: z.lazy((()=> PatientSchema) as ()=> z.AnyZodObject).optional(),
   date: z.coerce.date(),
   notes: z.string().nullable().optional(),
   initialDiscomfort: z.number().int().min(0).max(10),
   finalDiscomfort: z.number().int().min(0).max(10),
-  status: z.nativeEnum(ScheduleStatus),
+  status: z.nativeEnum(AppointmentStatus),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional()
 })
 
-export type ScheduleType = z.infer<typeof ScheduleSchema>
+export type AppointmentType = z.infer<typeof AppointmentSchema>

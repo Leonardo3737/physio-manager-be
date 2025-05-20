@@ -20,6 +20,7 @@ app.use(authMiddleware)
 
 controllersStartup(app)
 
+
 app.use(responseError)
 
 DBconnectionTest()

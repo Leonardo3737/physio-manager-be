@@ -1,3 +1,4 @@
+import { AppError } from "../config/errors/app.error";
 import { CreateUserType } from "../dtos/user/create-user.dto";
 import { ListUserDTO, ListUserType } from "../dtos/user/list-user.dto";
 import { UpdateUserType } from "../dtos/user/update-user.dto";
@@ -8,15 +9,21 @@ import User from "../models/user.model";
 export class UserRepository {
 
   async alterUser(userId: number, newUserData: UpdateUserType): Promise<void> {
-    await User.update({...newUserData}, {where: {id: userId}})
+    await User.update({ ...newUserData }, { where: { id: userId } })
   }
 
   async createUser(newUser: CreateUserType): Promise<ListUserType> {
-    const process = await User.create(newUser)
+    try {
+      const process = await User.create(newUser)
 
-    const userCreated = new ListUserDTO({ ...process.dataValues }).getAll()
+      const userCreated = new ListUserDTO({ ...process.dataValues }).getAll()
+      return userCreated
+    }
+    catch (err) {
+      console.error('Erro ao criar usuario:', err);
+      throw new AppError();
+    }
 
-    return userCreated
   }
 
   // DEVE SER CHAMDA APENAS EM UserService.resetPassword
