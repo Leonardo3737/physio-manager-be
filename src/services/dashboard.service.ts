@@ -1,7 +1,7 @@
 import { AppointmentStatus } from "../enum/appointment-status.enum";
 import { AppointmentRepository } from "../repositories/appointment.repository";
 import { PatientRepository } from "../repositories/patient.repository";
-import { getTodayRange } from "../utils/get-today-range";
+import { getCurrentWeekRange } from "../utils/get-date-range";
 
 export class DashboardService {
 
@@ -12,7 +12,7 @@ export class DashboardService {
 
   async getDashboard() {
 
-    const rangeDate = getTodayRange()
+    const rangeDate = getCurrentWeekRange()
 
     const todayAppointments = await this.appointmentRepository.listAllAppointments({
       status: AppointmentStatus.SCHEDULED
