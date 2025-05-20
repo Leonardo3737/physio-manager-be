@@ -1,32 +1,32 @@
-import { ScheduleStatus } from "../enum/schedule-status.enum";
+import { AppointmentStatus } from "../enum/appointment-status.enum";
+import { AppointmentRepository } from "../repositories/appointment.repository";
 import { PatientRepository } from "../repositories/patient.repository";
-import { ScheduleRepository } from "../repositories/schedule.repository";
-import { getTodayRange } from "../utils/getTodayRange";
+import { getCurrentWeekRange } from "../utils/get-date-range";
 
 export class DashboardService {
 
   constructor(
-    private scheduleRepository: ScheduleRepository,
+    private appointmentRepository: AppointmentRepository,
     private patientRepository: PatientRepository
   ) { }
 
   async getDashboard() {
 
-    const rangeDate = getTodayRange()
+    const rangeDate = getCurrentWeekRange()
 
-    const todaySchedules = await this.scheduleRepository.listAllSchedules({
-      status: ScheduleStatus.SCHEDULED
+    const todayAppointments = await this.appointmentRepository.listAllAppointments({
+      status: AppointmentStatus.SCHEDULED
     })
     const totalPatients = await this.patientRepository.count()
-    const totalSchedulesCompleted = await this.scheduleRepository.count({
+    const totalAppointmentsCompleted = await this.appointmentRepository.count({
       rangeDate,
-      status: ScheduleStatus.COMPLETED
+      status: AppointmentStatus.COMPLETED
     })
 
     return {
-      todaySchedules,
+      todayAppointments,
       totalPatients,
-      totalSchedulesCompleted
+      totalAppointmentsCompleted
     }
   }
 }

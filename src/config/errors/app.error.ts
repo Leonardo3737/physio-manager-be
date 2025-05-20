@@ -4,7 +4,7 @@ export class AppError {
     public readonly statusCode = 500,
     public readonly code: string = "Error",
   ) {
-    console.log();
+    console.log('erro');
     
   }
 }

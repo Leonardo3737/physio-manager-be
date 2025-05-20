@@ -3,8 +3,8 @@ import { DTO } from '../dto';
 import { UpdatePatientSchema } from './update-patient.dto';
 
 export const FilterPatientSchema = UpdatePatientSchema.extend({
-  page: z.coerce.number(),
-  perPage: z.coerce.number(),
+  page: z.coerce.number().int().default(1),
+  perPage: z.coerce.number().int().default(10),
   search: z.string(),
 }).partial();
 

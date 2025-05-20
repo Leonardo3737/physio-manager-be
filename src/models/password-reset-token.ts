@@ -14,7 +14,7 @@ class PasswordResetToken extends Model<IPasswordResetToken, ICreatePasswordReset
 
 PasswordResetToken.init({
   id: {
-    type: DataTypes.INTEGER.UNSIGNED,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
@@ -32,11 +32,12 @@ PasswordResetToken.init({
   createdAt: DataTypes.DATE,
 }, {
   sequelize,
-  tableName: 'password-reset-token'
+  tableName: 'password_reset_token',
+  underscored: true
 })
 
 PasswordResetToken.belongsTo(User, {
-  foreignKey: 'userId',
+  foreignKey: 'user_id',
   as: 'patient'
 });
 

@@ -1,7 +1,7 @@
-import { ScheduleType } from "../dtos/schedule/schedule.schema"
+import { AppointmentType } from "../dtos/appointment/appointment.schema"
 
 export interface IDashboard {
   totalPatients: number
-  totalSchedulesCompleted: number
-  todaySchedules: ScheduleType[]
+  totalAppointmentsCompleted: number
+  todayAppointments: AppointmentType[]
 }

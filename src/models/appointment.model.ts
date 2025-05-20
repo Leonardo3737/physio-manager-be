@@ -1,12 +1,13 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/db-connection';
-import { CreateScheduleType } from '../dtos/schedule/create-schedule.dto';
-import { ScheduleType } from '../dtos/schedule/schedule.schema';
-import { ScheduleStatus } from '../enum/schedule-status.enum';
-import AppointmentType from './appointment-type.model';
-import Patient from './patient.model';
+import { CreateAppointmentType } from '../dtos/appointment/create-appointment.dto';
+import { AppointmentType } from '../dtos/appointment/appointment.schema';
+import { AppointmentStatus } from '../enum/appointment-status.enum';
 
-class Schedule extends Model<ScheduleType, CreateScheduleType> {
+import Patient from './patient.model';
+import AppointmentTypeModel from './appointment-type.model';
+
+class Appointment extends Model<AppointmentType, CreateAppointmentType> {
   declare id: number;
   declare patientId: number;
   declare appointmentTypeId: number;
@@ -14,12 +15,12 @@ class Schedule extends Model<ScheduleType, CreateScheduleType> {
   declare initialDiscomfort: number;
   declare finalDiscomfort: number;
   declare notes: string | null;
-  declare status: ScheduleStatus;
+  declare status: AppointmentStatus;
   declare createdAt: Date;
   declare updatedAt: Date;
 }
 
-Schedule.init({
+Appointment.init({
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -50,37 +51,42 @@ Schedule.init({
     allowNull: true
   },
   status: {
-    type: DataTypes.ENUM(...Object.values(ScheduleStatus)),
+    type: DataTypes.ENUM(...Object.values(AppointmentStatus)),
     allowNull: false
   },
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE
 }, {
   sequelize,
-  tableName: 'schedules',
-  modelName: 'schedule',
+  tableName: 'appointment',
+  modelName: 'appointment',
   timestamps: true,
   underscored: true
 });
 
-Schedule.belongsTo(Patient, {
-  foreignKey: 'patientId',
+Appointment.belongsTo(Patient, {
+  foreignKey: 'patient_id',
   as: 'patient'
 });
 
-Patient.hasMany(Schedule, {
-  foreignKey: 'patientId',
-  as: 'schedules'
+Patient.hasMany(Appointment, {
+  foreignKey: 'patient_id',
+  as: 'appointments'
 });
 
-Schedule.belongsTo(AppointmentType, {
+Patient.hasOne(Appointment, {
+  foreignKey: 'patient_id',
+  as: 'lastCompletedAppointment',
+})
+
+Appointment.belongsTo(AppointmentTypeModel, {
   foreignKey: 'appointment_type_id',
   as: 'appointmentType'
 });
 
-AppointmentType.hasMany(Schedule, {
-  foreignKey: 'appointmentTypeId',
-  as: 'schedules'
+AppointmentTypeModel.hasMany(Appointment, {
+  foreignKey: 'appointment_type_id',
+  as: 'appointments'
 });
 
-export default Schedule;
+export default Appointment;
