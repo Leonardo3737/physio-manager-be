@@ -28,3 +28,16 @@ export function getCurrentWeekRange(): { start: Date; end: Date } {
 
   return { start, end };
 }
+
+export function getCurrentMonthRange(): { start: Date; end: Date } {
+  const start = new Date()
+  start.setDate(1)
+  start.setHours(0, 0, 0, 0)
+
+  const end = new Date()
+  end.setMonth(end.getMonth() + 1)
+  end.setDate(0)
+  end.setHours(23, 59, 59, 999)
+
+  return { start, end }
+}
