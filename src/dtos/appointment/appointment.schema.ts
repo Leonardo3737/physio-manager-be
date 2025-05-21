@@ -4,8 +4,8 @@ import { AppointmentStatus } from '../../enum/appointment-status.enum'
 
 export const AppointmentSchema = z.object({
   id: z.number(),
-  patientId: z.number(),
-  appointmentTypeId: z.number(),  
+  patientId: z.coerce.number(),
+  appointmentTypeId: z.coerce.number(),  
   patient: z.lazy((()=> PatientSchema) as ()=> z.AnyZodObject).optional(),
   date: z.coerce.date(),
   notes: z.string().nullable().optional(),
