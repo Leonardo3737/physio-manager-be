@@ -25,15 +25,15 @@ Patient.init({
   },
   email: {
     type: DataTypes.STRING(100),
-    allowNull: false
+    allowNull: true
   },
   phone: {
     type: DataTypes.STRING(11),
-    allowNull: false
+    allowNull: true
   },
   birthday: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   },
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE,
