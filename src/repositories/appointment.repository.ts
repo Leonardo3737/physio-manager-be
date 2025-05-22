@@ -1,6 +1,6 @@
 import { Op, WhereOptions } from 'sequelize'
 import { CreateAppointmentType } from '../dtos/appointment/create-appointment.dto'
-import { ListAppointmentDTO, ListAppointmentType } from '../dtos/appointment/list-appointment.dto'
+import { ListAppointmentType } from '../dtos/appointment/list-appointment.dto'
 import { AppointmentFilterType } from '../dtos/appointment/appointment-filter.dto'
 import { UpdateAppointmentType } from '../dtos/appointment/update-appointment.dto'
 import { AppointmentStatus } from '../enum/appointment-status.enum'
@@ -8,6 +8,8 @@ import Patient from '../models/patient.model'
 import Appointment from '../models/appointment.model'
 import { AppointmentType } from '../dtos/appointment/appointment.schema'
 import AppointmentTypeModel from '../models/appointment-type.model'
+import { CreatePaginatedResponse } from '../utils/create-paginated-response'
+import { GetAppointmentDTO, GetAppointmentType } from '../dtos/appointment/get-appointment.dto'
 
 interface ICountFilter {
   rangeDate?: {
@@ -22,9 +24,9 @@ export class AppointmentRepository {
     await Appointment.update({ ...newAppointmentData }, { where: { id } })
   }
 
-  async createAppointment(newAppointment: CreateAppointmentType): Promise<ListAppointmentType> {
+  async createAppointment(newAppointment: CreateAppointmentType): Promise<GetAppointmentType> {
     const process = await Appointment.create(newAppointment)
-    const created = new ListAppointmentDTO({ ...process.dataValues }).getAll()
+    const created = new GetAppointmentDTO({ ...process.dataValues }).getAll()
     return created
   }
 
@@ -32,7 +34,7 @@ export class AppointmentRepository {
     await Appointment.destroy({ where: { id } })
   }
 
-  async listAllAppointments(filter?: AppointmentFilterType): Promise<AppointmentType[]> {
+  async listAllAppointments(filter?: AppointmentFilterType): Promise<ListAppointmentType> {
     const validFilter = Object.fromEntries(
       Object.entries(filter || {}).filter(([_, v]) => v !== undefined)
     )
@@ -55,8 +57,13 @@ export class AppointmentRepository {
       }
     }
 
+    const { page = 1, perPage = 10 } = filter || {}
 
-    const appointments = await Appointment.findAll({
+    const offset = (page - 1) * perPage
+    const limit = perPage
+
+
+    const result = await Appointment.findAndCountAll({
       where,
       include: [
         {
@@ -69,9 +76,11 @@ export class AppointmentRepository {
         },
       ],
       order: [['date', 'ASC']],
-    },
-    )
-    return appointments
+      limit,
+      offset,
+    })
+
+    return CreatePaginatedResponse({result, page, perPage})
   }
 
   async listAppointmentById(id: number): Promise<AppointmentType | null> {

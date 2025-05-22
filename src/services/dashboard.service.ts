@@ -19,6 +19,7 @@ export class DashboardService {
       status: AppointmentStatus.SCHEDULED,
       initialDate: rangeDay.start,
       finalDate: rangeDay.end,
+      perPage: 20
     })
     const totalPatients = await this.patientRepository.count()
     const totalAppointmentsCompleted = await this.appointmentRepository.count({

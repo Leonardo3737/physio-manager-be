@@ -8,6 +8,7 @@ import { AppointmentStatus } from "../enum/appointment-status.enum"
 import { AppointmentFilterDTO } from "../dtos/appointment/appointment-filter.dto"
 import { StartAppointmentDTO } from "../dtos/appointment/start-appointment.dto"
 import { ConcludeAppointmentDTO } from "../dtos/appointment/conclude-appointment.dto"
+import { GetAppointmentType } from "../dtos/appointment/get-appointment.dto"
 
 export class AppointmentService {
 
@@ -15,7 +16,7 @@ export class AppointmentService {
     private repository: AppointmentRepository
   ) { }
 
-  async listAllAppointments(filter?: AppointmentFilterDTO): Promise<AppointmentType[]> {
+  async listAllAppointments(filter?: AppointmentFilterDTO): Promise<ListAppointmentType> {
     return await this.repository.listAllAppointments(filter?.getAll())
   }
 
@@ -30,7 +31,7 @@ export class AppointmentService {
   }
 
 
-  async registerAppointment(newAppointment: CreateAppointmentDTO, force: boolean): Promise<ListAppointmentType> {
+  async registerAppointment(newAppointment: CreateAppointmentDTO, force: boolean): Promise<GetAppointmentType> {
     const appointment = { ...newAppointment.getAll() }
     appointment.status = AppointmentStatus.SCHEDULED
 
@@ -111,11 +112,11 @@ export class AppointmentService {
     const finalDate = new Date(date)
     finalDate.setHours(finalDate.getHours() + 1)
 
-    const appointments = await this.repository.listAllAppointments({ initialDate, finalDate })
+    const appointments = await this.repository.listAllAppointments({ initialDate, finalDate, perPage: 100 })
 
-    const isOtherAppointment = appointments.find(s => s.id !== appointmentId)
+    const isOtherAppointment = appointments.data.find(s => s.id !== appointmentId)
 
-    const existAppointmentAtSameDate = appointments.find(s =>
+    const existAppointmentAtSameDate = appointments.data.find(s =>
       s.date.getTime() === date.getTime() &&
       s.id !== appointmentId
     )
@@ -123,7 +124,7 @@ export class AppointmentService {
     if (existAppointmentAtSameDate)
       throw new AppError('There is already a registered appointment for this time', 409, 'EXACT_CONFLICT')
 
-    if (appointments.length && !force && isOtherAppointment)
+    if (appointments.data.length && !force && isOtherAppointment)
       throw new AppError('There is already a appointment close to the defined date and time, to create it anyway send the "force" flag', 409, 'NEARBY_CONFLICT')
 
   }
