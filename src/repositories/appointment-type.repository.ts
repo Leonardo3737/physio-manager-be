@@ -4,6 +4,7 @@ import { CreateAppointmentTypeDTO } from '../dtos/appointment-type/create-appoin
 import { ListAppointmentTypeType } from '../dtos/appointment-type/list-appointment-type.dto';
 import { UpdateAppointmentTypeDTO } from '../dtos/appointment-type/update-appointment-type.dto';
 import AppointmentType from '../models/appointment-type.model';
+import { CreatePaginatedResponse } from '../utils/create-paginated-response';
 
 export class AppointmentTypeRepository {
   async create(data: CreateAppointmentTypeDTO) {
@@ -41,23 +42,6 @@ export class AppointmentTypeRepository {
       order: [ [ 'id', 'DESC' ] ]
     });
 
-    const total = result.count
-    const totalPagesCalc = Math.ceil(total / perPage)
-
-    const from = offset + 1
-    const to = offset + result.rows.length
-
-    return {
-      data: result.rows,
-      meta: {
-        page,
-        perPage,
-        from,
-        to,
-        count: result.rows.length,
-        hasMore: page < totalPagesCalc,
-        lastPage: totalPagesCalc,
-      },
-    }
+    return CreatePaginatedResponse({result, page, perPage})
   }
 }
