@@ -161,7 +161,7 @@ export class UserService {
         from: `"physio-manager" <${process.env.SENDER_EMAIL}>`,
         to: email,
         subject: 'Recuperar senha',
-        html: `<p>Token para recuperação de senha: <b>${token}</b></p>`,
+        html: `<p>Código para recuperação de senha: <b>${token}</b></p>`,
       })
       return
     }
