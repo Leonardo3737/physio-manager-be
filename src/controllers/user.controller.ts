@@ -34,6 +34,14 @@ export class UserController {
       res.send(user)
     })
 
+     app.get(UserController.path + '-infos', async (req: Request, res: Response) => {
+      if(!req.user) {
+        throw new AppError('unauthorized', 401)
+      }
+      const user = await this.service.listUserById(req.user.sub)
+      res.send(user)
+    })
+
     app.post(UserController.path, async (req: Request, res: Response) => {
       const data = new CreateUserDTO({
         ...req.body
