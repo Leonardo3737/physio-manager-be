@@ -2,6 +2,7 @@
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
+    "typeRoots": ["./@types", "./node_modules/@types"],
 
     /* Language and Environment */
     "target": "ES2024",
