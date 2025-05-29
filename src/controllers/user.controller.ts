@@ -42,14 +42,14 @@ export class UserController {
       res.send(user)
     })
 
-    app.post(UserController.path, async (req: Request, res: Response) => {
+    /* app.post(UserController.path, async (req: Request, res: Response) => {
       const data = new CreateUserDTO({
         ...req.body
       })
 
       const newUser = await this.service.registerUser(data)
       res.status(201).send(newUser)
-    })
+    }) */
 
     app.post(UserController.authPath, async (req: Request, res: Response) => {
       const data = new UserAuthDTO({

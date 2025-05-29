@@ -11,6 +11,10 @@ import AppointmentTypeModel from '../models/appointment-type.model'
 import { CreatePaginatedResponse } from '../utils/create-paginated-response'
 import { GetAppointmentDTO, GetAppointmentType } from '../dtos/appointment/get-appointment.dto'
 
+type AtLeastOne<T> = {
+  [K in keyof T]: Required<Pick<T, K>> & Partial<Omit<T, K>>
+}[keyof T]
+
 interface ICountFilter {
   rangeDate?: {
     start: Date,
@@ -30,8 +34,8 @@ export class AppointmentRepository {
     return created
   }
 
-  async deleteAppointment(id: number): Promise<void> {
-    await Appointment.destroy({ where: { id } })
+  async deleteAppointment(filter: AtLeastOne<AppointmentType>): Promise<void> {
+    await Appointment.destroy({ where: { ...filter } })
   }
 
   async listAllAppointments(filter?: AppointmentFilterType): Promise<ListAppointmentType> {

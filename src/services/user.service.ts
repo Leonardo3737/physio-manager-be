@@ -135,8 +135,6 @@ export class UserService {
     try {
       await this.sendResetPasswordEmail(email, token)
     } catch (err) {
-      console.log(err);
-
       await this.passwordResetTokenRepository.deletePasswordResetToken(passwordResetToken.id)
 
       if (err instanceof AppError) {
@@ -166,7 +164,6 @@ export class UserService {
       return
     }
     catch (err) {
-      console.log(err)
       throw new AppError('fail', 500)
     }
   }

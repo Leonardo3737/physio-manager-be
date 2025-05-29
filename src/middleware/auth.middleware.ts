@@ -4,10 +4,10 @@ import { isJWTValid } from "../utils/jwt";
 import { AppError } from "../config/errors/app.error";
 
 const publicRoutes = [
-  {
+  /* {
     path: UserController.path,
     method: 'POST'
-  },
+  }, */
   {
     path: UserController.authPath,
     method: 'POST'
