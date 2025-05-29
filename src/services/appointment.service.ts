@@ -115,7 +115,7 @@ export class AppointmentService {
     const finalDate = new Date(date)
     finalDate.setHours(finalDate.getHours() + 1)
 
-    const appointments = await this.repository.listAllAppointments({ initialDate, finalDate, perPage: 100 })
+    const appointments = await this.repository.listAllAppointments({ initialDate, finalDate, perPage: 100, status: AppointmentStatus.SCHEDULED })
 
     const isOtherAppointment = appointments.data.find(s => s.id !== appointmentId)
 
