@@ -17,7 +17,11 @@ export class PatientController {
 
     app.delete(PatientController.pathWithId, async (req: Request, res: Response) => {
       const id = getParamsId(req)
-      await this.service.deletePatient(id)
+
+      const { delete_appointments } = req.query      
+      const deleteAppointments = Boolean(delete_appointments)
+
+      await this.service.deletePatient(id, deleteAppointments)
       res.status(204).send()
     })
 

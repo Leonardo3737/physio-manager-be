@@ -92,10 +92,13 @@ export class AppointmentService {
     await this.repository.alterAppointment(id, updateData)
   }
 
-
   async deleteAppointment(id: number): Promise<void> {
     await this.getAppointmentById(id)
-    await this.repository.deleteAppointment(id)
+    await this.repository.deleteAppointment({id})
+  }
+
+  async deleteAppointmentsByPatient(patientId: number): Promise<void> {
+    await this.repository.deleteAppointment({patientId})
   }
 
 

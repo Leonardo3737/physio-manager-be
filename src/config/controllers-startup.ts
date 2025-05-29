@@ -22,12 +22,7 @@ export function controllersStartup(app: Application) {
 
   /* PASSWORD-RESET-TOKEN */
   const passwordResetTokenRepository = new PasswordResetTokenRepository()
-
-  /* PATIENT */
-  const patientRespository = new PatientRepository()
-  const patientService = new PatientService(patientRespository)
-  new PatientController(app, patientService)
-
+  
   /* APPOINTMENT-TYPE */
   const appointmentTypeRespository = new AppointmentTypeRepository()
   const appointmentTypeService = new AppointmentTypeService(appointmentTypeRespository)
@@ -37,6 +32,11 @@ export function controllersStartup(app: Application) {
   const appointmentRespository = new AppointmentRepository()
   const appointmentService = new AppointmentService(appointmentRespository)
   new AppointmentController(app, appointmentService)
+
+  /* PATIENT */
+  const patientRespository = new PatientRepository()
+  const patientService = new PatientService(patientRespository, appointmentService)
+  new PatientController(app, patientService)
 
   /* USER */
   const userRespository = new UserRepository()
