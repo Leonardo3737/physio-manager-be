@@ -8,7 +8,7 @@ export const AppointmentSchema = z.object({
   appointmentTypeId: z.coerce.number(),  
   patient: z.lazy((()=> PatientSchema) as ()=> z.AnyZodObject).optional(),
   date: z.coerce.date(),
-  notes: z.string().nullable().optional(),
+  notes: z.string().max(1000).nullable().optional(),
   initialDiscomfort: z.number().int().min(0).max(10),
   finalDiscomfort: z.number().int().min(0).max(10),
   status: z.nativeEnum(AppointmentStatus),
